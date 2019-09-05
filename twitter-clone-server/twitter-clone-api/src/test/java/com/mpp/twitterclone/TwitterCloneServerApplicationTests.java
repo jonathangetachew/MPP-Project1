@@ -1,4 +1,4 @@
-package com.mpp.twittercloneserver;
+package com.mpp.twitterclone;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
