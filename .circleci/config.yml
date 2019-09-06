@@ -60,4 +60,4 @@ jobs:
           path: ~/test-results
 
       - codecov/upload:
-          file: ~/test-results/junit
+          file: ~/test-results/junit/.*xml
