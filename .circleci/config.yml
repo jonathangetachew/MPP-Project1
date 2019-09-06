@@ -42,8 +42,8 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      # run tests!
-      - run: mvn integration-test
+      # run tests! and generate code coverage report
+      - run: mvn integration-test cobertura:cobertura
 
       # Test Summary Config
       - run:
@@ -55,3 +55,8 @@ jobs:
 
       - store_test_results:
           path: ~/test-results
+
+      # Send generated code coverage report to codecov
+      - run:
+          name: Send to CodeCov
+          command: bash <(curl -s https://codecov.io/bash)
