@@ -1,27 +1,30 @@
 {
   "expo": {
-    "sdkVersion": "30.0.0",
-    "name": "Smart Pocket",
-    "slug": "smartpocket",
-    "icon": "src/res/icon/main.png",
+    "name": "TwitterClone",
+    "slug": "twitter-clone-client",
     "privacy": "public",
+    "sdkVersion": "34.0.0",
     "platforms": [
       "ios",
-      "android"
+      "android",
+      "web"
     ],
-    "version": "0.2.0",
-    "android": {
-      "package": "com.bairesdev.smartpocket",
-      "permissions": [
-        "CAMERA"
-      ]
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
-    "ios": {
-      "bundleIdentifier": "com.bairesdev.smartpocket",
-      "buildNumber": "0.2.0"
+    "updates": {
+      "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "ios": {
+      "supportsTablet": true
+    }
   }
 }
