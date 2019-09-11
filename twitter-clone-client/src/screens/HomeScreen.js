@@ -37,9 +37,7 @@ export default class HomeScreen extends React.Component {
           <View style={styles.welcomeContainer}>
             <Image
               source={
-                __DEV__
-                  ? require('../assets/images/nyan1.svg')
-                  : require('../assets/images/nyan1.svg')
+                require('../../assets/images/nyan1.svg')
               }
               style={styles.welcomeImage}
             />
