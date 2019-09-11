@@ -10,7 +10,7 @@ import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import storage from './src/redux/store'
 import rootSaga from './src/redux/sagas';
-import AppNavigator from './navigation/AppNavigator';
+import AppNavigator from './src/navigation/AppNavigator';
 
 const persistor = persistStore(storage.getStore());
 

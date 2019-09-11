@@ -32,9 +32,7 @@ export default class SignInScreen extends React.Component {
           >
             <Image
               source={
-                __DEV__
-                  ? require('../../assets/images/nyan1.svg')
-                  : require('../../assets/images/nyan1.svg')
+                require('../../../assets/images/nyan1.svg')
               }
               style={this.styles.welcomeImage}
             />
