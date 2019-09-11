@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
+import LogoTitle from "../components/LogoTitle";
 
 export default function LinksScreen() {
   return (
@@ -15,7 +16,7 @@ export default function LinksScreen() {
 }
 
 LinksScreen.navigationOptions = {
-  title: 'Links',
+  headerTitle: <LogoTitle title="Links"/>
 };
 
 const styles = StyleSheet.create({
