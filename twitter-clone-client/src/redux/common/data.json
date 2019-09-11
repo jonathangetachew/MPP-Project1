@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Hammer",
+    "sector": "Buildings",
+    "price": 20
+  },
+  {
+    "name": "Needle",
+    "sector": "Building",
+    "price": 0.02
+  },
+  {
+    "name": "Metal Chain",
+    "sector": "Building",
+    "price": 55
+  },
+  {
+    "name": "Scotch Tape",
+    "sector": "Building",
+    "price": 7.5
+  },
+  {
+    "name": "Keyboard",
+    "sector": "Office",
+    "price": 37
+  },
+  {
+    "name": "Monitor",
+    "sector": "Office",
+    "price": 299
+  },
+  {
+    "name": "Desk",
+    "sector": "Office",
+    "price": 250
+  },
+  {
+    "name": "Lamp",
+    "sector": "Office",
+    "price": 43
+  },
+  {
+    "name": "Bread Loft",
+    "sector": "Food & Beverages",
+    "price": 5
+  },
+  {
+    "name": "Soda",
+    "sector": "Food & Beverages",
+    "price": 3.3
+  },
+  {
+    "name": "Sugar",
+    "sector": "Food & Beverages",
+    "price": 1.99
+  },
+  {
+    "name": "Socks",
+    "sector": "Clothing",
+    "price": 7.3
+  },
+  {
+    "name": "Winter Jacket",
+    "sector": "Clothing",
+    "price": 94
+  },
+  {
+    "name": "Shirt",
+    "sector": "Clothing",
+    "price": 45
+  }
+]

@@ -6,8 +6,9 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import {connect} from 'react-redux';
 
-export default class AuthLoadingScreen extends React.Component {
+class AuthLoadingScreen extends React.Component {
   componentDidMount() {
     this._bootstrapAsync();
   }
@@ -18,6 +19,7 @@ export default class AuthLoadingScreen extends React.Component {
 
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
+    console.log("USER_TOKEN", userToken, this.props.user);
     this.props.navigation.navigate(userToken ? 'App' : 'Auth');
   };
 
@@ -31,3 +33,5 @@ export default class AuthLoadingScreen extends React.Component {
     );
   }
 }
+
+export default connect(({user}) => ({user}))(AuthLoadingScreen);
