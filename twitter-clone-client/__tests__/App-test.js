@@ -8,6 +8,14 @@ jest.mock('expo', () => ({
   AppLoading: 'AppLoading',
 }));
 
+jest.mock('react-redux', () => ({
+  Provider: 'Provider',
+}));
+
+jest.mock('redux-persist/integration/react', () => ({
+  PersistGate: 'PersistGate',
+}));
+
 jest.mock('../src/navigation/AppNavigator', () => 'AppNavigator');
 
 describe('App', () => {

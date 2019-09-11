@@ -1,22 +1,80 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`App renders the loading screen 1`] = `
-<AppLoading
-  onError={[Function]}
-  onFinish={[Function]}
-  startAsync={[Function]}
-/>
-`;
-
-exports[`App renders the root without loading screen 1`] = `
-<View
-  style={
+<Provider
+  store={
     Object {
-      "backgroundColor": "#fff",
-      "flex": 1,
+      "dispatch": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+      Symbol(observable): [Function],
     }
   }
 >
-  <AppNavigator />
-</View>
+  <PersistGate
+    loading={null}
+    persistor={
+      Object {
+        "dispatch": [Function],
+        "flush": [Function],
+        "getState": [Function],
+        "pause": [Function],
+        "persist": [Function],
+        "purge": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+        Symbol(observable): [Function],
+      }
+    }
+  >
+    <AppLoading
+      onError={[Function]}
+      onFinish={[Function]}
+      startAsync={[Function]}
+    />
+  </PersistGate>
+</Provider>
+`;
+
+exports[`App renders the root without loading screen 1`] = `
+<Provider
+  store={
+    Object {
+      "dispatch": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+      Symbol(observable): [Function],
+    }
+  }
+>
+  <PersistGate
+    loading={null}
+    persistor={
+      Object {
+        "dispatch": [Function],
+        "flush": [Function],
+        "getState": [Function],
+        "pause": [Function],
+        "persist": [Function],
+        "purge": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+        Symbol(observable): [Function],
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "#fff",
+          "flex": 1,
+        }
+      }
+    >
+      <AppNavigator />
+    </View>
+  </PersistGate>
+</Provider>
 `;
