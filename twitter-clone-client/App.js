@@ -4,14 +4,24 @@ import * as Font from 'expo-font';
 import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+// Added this imports
+import { Provider } from 'react-redux';
+import { persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import storage from './src/redux/store'
+import rootSaga from './src/redux/sagas';
 import AppNavigator from './navigation/AppNavigator';
+
+const persistor = persistStore(storage.getStore());
+
+storage.getSagaMiddleware().run(rootSaga);
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
+  let Content;
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return (
+    Content = (
       <AppLoading
         startAsync={loadResourcesAsync}
         onError={handleLoadingError}
@@ -19,13 +29,21 @@ export default function App(props) {
       />
     );
   } else {
-    return (
+    Content = (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <AppNavigator />
       </View>
     );
   }
+  
+  return (
+    <Provider store={storage.getStore()}>
+      <PersistGate loading={null} persistor={persistor}>
+        {Content}
+      </PersistGate>
+    </Provider>
+  );
 }
 
 async function loadResourcesAsync() {

@@ -1,6 +1,7 @@
 import { createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import SignInScreen from '../screens/auth/SignInScreen';
+
 import AuthLoadingScreen from '../screens/auth/SignInScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import MainTabNavigator from './MainTabNavigator';
