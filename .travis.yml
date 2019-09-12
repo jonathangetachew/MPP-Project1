@@ -6,8 +6,9 @@ cache:
     - ~/.npm
 before_install: 
   - cd twitter-clone-client/
-  - rm package-lock.json
-  - rm -rf node_modules/
+  - rm yarn.lock || true
+  - rm package-lock.json || true
+  - rm -rf node_modules/ || true
 install:
   - npm install
 before_script:
