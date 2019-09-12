@@ -58,9 +58,6 @@ jobs:
       - store_test_results:
           path: ~/test-results
 
-      - store_artifacts:
-          path: target/surefire-reports
-
       # Upload test results to CodeCov
       - codecov/upload:
-          file: ~/test-results
+          file: test-results
