@@ -28,11 +28,23 @@ exports[`App renders the loading screen 1`] = `
       }
     }
   >
-    <AppLoading
-      onError={[Function]}
-      onFinish={[Function]}
-      startAsync={[Function]}
-    />
+    <ThemeProvider>
+      <RCTSafeAreaView
+        emulateUnlessSupported={true}
+        style={
+          Object {
+            "backgroundColor": "#fff",
+            "flex": 1,
+          }
+        }
+      >
+        <AppLoading
+          onError={[Function]}
+          onFinish={[Function]}
+          startAsync={[Function]}
+        />
+      </RCTSafeAreaView>
+    </ThemeProvider>
   </PersistGate>
 </Provider>
 `;
@@ -65,16 +77,28 @@ exports[`App renders the root without loading screen 1`] = `
       }
     }
   >
-    <View
-      style={
-        Object {
-          "backgroundColor": "#fff",
-          "flex": 1,
+    <ThemeProvider>
+      <RCTSafeAreaView
+        emulateUnlessSupported={true}
+        style={
+          Object {
+            "backgroundColor": "#fff",
+            "flex": 1,
+          }
         }
-      }
-    >
-      <AppNavigator />
-    </View>
+      >
+        <View
+          style={
+            Object {
+              "backgroundColor": "#fff",
+              "flex": 1,
+            }
+          }
+        >
+          <AppNavigator />
+        </View>
+      </RCTSafeAreaView>
+    </ThemeProvider>
   </PersistGate>
 </Provider>
 `;

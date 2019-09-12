@@ -11,6 +11,6 @@ const AuthStack = createStackNavigator({
     initialRouteName: 'Welcome',
 });
 
-AuthStack.path = '';
+//AuthStack.path = '';
 
 export default AuthStack;

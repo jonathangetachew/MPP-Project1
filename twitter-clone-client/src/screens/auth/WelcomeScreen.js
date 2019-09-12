@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions, Platform } from 'react-native';
-import { Avatar, Icon, Button, ListItem, Text, ThemeProvider } from 'react-native-elements';
+import { StyleSheet, View, Platform, ScrollView } from 'react-native';
+import { Avatar, Icon, ListItem, Text } from 'react-native-elements';
+import RoundButton from '../../components/RoundButton';
 import Colors from '../../constants/Colors';
-
-const isLandscape = () => Dimensions.get('window').width > Dimensions.get('window').height;
+import ReactResizeDetector from 'react-resize-detector';
 
 const FeatureItem = (props) => (
     <ListItem
@@ -21,8 +21,6 @@ const FeatureItem = (props) => (
         }
     />
 );
-
-const RoundButton = (props) => <Button {...props} buttonStyle={[{ borderRadius: 20 }, props.buttonStyle]} />
 
 export default class WelcomeScreen extends React.PureComponent {
     static navigationOptions = {
@@ -91,14 +89,20 @@ export default class WelcomeScreen extends React.PureComponent {
     }
 
     render() {
+        if(Platform.OS != "web") return this.renderOptionPane();
+
         return (
-            <ThemeProvider>
-                <View style={styles.container}>
-                    {Platform.OS == "web" && this.renderBluePane()}
-                    {this.renderOptionPane()}
-                </View>
+            <ScrollView>
+                <ReactResizeDetector handleWidth handleHeight>
+                    {({ width, height }) => (
+                        <View style={[styles.container, { flexDirection: Platform.OS == "web" && width > height ? 'row' : 'column-reverse' }]}>
+                            {Platform.OS == "web" && this.renderBluePane()}
+                            {this.renderOptionPane()}
+                        </View>
+                    )}
+                </ReactResizeDetector>
                 {Platform.OS == "web" && this.renderFooter()}
-            </ThemeProvider>
+            </ScrollView>
         );
     }
 }
@@ -106,7 +110,6 @@ export default class WelcomeScreen extends React.PureComponent {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: isLandscape() ? 'row' : 'column-reverse',
         justifyContent: 'space-evenly',
         alignItems: 'stretch',
         backgroundColor: '#fff',

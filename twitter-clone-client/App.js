@@ -2,8 +2,9 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { ThemeProvider } from 'react-native-elements';
 // Added this imports
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
@@ -36,11 +37,15 @@ export default function App(props) {
       </View>
     );
   }
-  
+
   return (
     <Provider store={storage.getStore()}>
       <PersistGate loading={null} persistor={persistor}>
-        {Content}
+        <ThemeProvider>
+          <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+            {Content}
+          </SafeAreaView>
+        </ThemeProvider>
       </PersistGate>
     </Provider>
   );
