@@ -60,4 +60,4 @@ jobs:
 
       # Upload test results to CodeCov
       - codecov/upload:
-          file: ~/twitter-clone-server/target/surefire-reports/*.xml
+          file: /home/circleci/TwitterClone/twitter-clone-server/twitter-clone-api/target/surefire-reports/*.xml
