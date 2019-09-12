@@ -1,11 +1,12 @@
 language: node_js
 node_js:
-  - 10
-before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version version-number
-  - export PATH="$HOME/.yarn/bin:$PATH"
-  - cd twitter-clone-client/
-install:
-  - yarn install
+  - lts/*
+cache:
+  directories:
+    - ~/.npm
+before_install: cd twitter-clone-client/
+before_script:
+  - npm install -g npm@latest
 script:
-  - yarn test
+  - npm ci
+  - npx jest --ci
