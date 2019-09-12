@@ -9,7 +9,7 @@ export default class LogoTitle extends React.Component {
       return (
         <React.Fragment>
         <Image
-          source={require('../../assets/images/nyan1.svg')}
+          source={require('../../assets/images/logo.png')}
           style={{ width: 34, height: 21 }}
         />
         <Text h3>{this.props.title}</Text>
