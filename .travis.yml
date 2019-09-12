@@ -4,7 +4,10 @@ node_js:
 cache:
   directories:
     - ~/.npm
-before_install: cd twitter-clone-client/
+before_install: 
+  - cd twitter-clone-client/
+  - rm package-lock.json
+  - rm -rf node_modules/
 install:
   - npm install
 before_script:
