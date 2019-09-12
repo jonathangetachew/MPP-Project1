@@ -27,12 +27,6 @@ jobs:
       - checkout:
           path: ~/TwitterClone
 
-      # Run a step to setup an environment variable.
-      - run: 
-          name: "Setup CodeCov Environment Variable"
-          command: |
-            echo 'export CODECOV_TOKEN="c6f15542-47ef-4217-9233-c4c13aecb681"'
-
       # Download and cache dependencies
       - restore_cache:
           keys:
