@@ -5,8 +5,14 @@ A Twitter Clone App for our MPP course at Maharishi University of Management.
 #### Server Side
 
     [x] Spring Boot with SpringMVC
+    [x] CircleCI
     [x] REST API
+    [x] MongoDB
+    [ ] Spring Security
+    [ ] CodeCov
 
 #### Client Side
     [x] ReactJS
+    [x] Redux
+    [x] TravisCI
 
