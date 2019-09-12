@@ -16,6 +16,10 @@ jest.mock('redux-persist/integration/react', () => ({
   PersistGate: 'PersistGate',
 }));
 
+jest.mock('react-native-elements', () => ({
+  ThemeProvider: 'ThemeProvider'
+}));
+
 jest.mock('../src/navigation/AppNavigator', () => 'AppNavigator');
 
 describe('App', () => {
