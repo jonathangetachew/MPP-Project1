@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import { MonoText } from '../components/StyledText';
+import TweetList from '../components/TweetList';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -43,7 +44,7 @@ export default class HomeScreen extends React.Component {
             />
           </View>
         </ScrollView>
-  
+        <TweetList/>
         <View style={styles.tabBarInfoContainer}>
           <Text style={styles.tabBarInfoText}>
             This is a tab bar. You can edit it in:
