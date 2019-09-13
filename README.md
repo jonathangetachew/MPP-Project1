@@ -6,10 +6,10 @@ A Twitter Clone App for our MPP course at Maharishi University of Management.
 
     [x] Spring Boot with SpringMVC
     [x] CircleCI
-    [x] MongoDB
     [x] REST API
+    [x] MongoDB
     [ ] Spring Security
-    [ ] Swagger Documentation
+    [ ] CodeCov
 
 #### Client Side
     [x] ReactJS
