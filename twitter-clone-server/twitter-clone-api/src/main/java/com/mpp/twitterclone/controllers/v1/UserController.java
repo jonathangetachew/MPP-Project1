@@ -3,6 +3,8 @@ package com.mpp.twitterclone.controllers.v1;
 import com.mpp.twitterclone.controllers.v1.resourceassemblers.UserResourceAssembler;
 import com.mpp.twitterclone.model.User;
 import com.mpp.twitterclone.services.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -41,6 +43,8 @@ public class UserController {
 	}
 
 	///> Get Mappings
+	@ApiOperation(value = "Get all Users",
+			notes = "This operation can only be done by an ADMIN.")
 	@GetMapping
 	public Resources<Resource<User>> getAllUsers() {
 		List<Resource<User>> users = userService.findAll().stream()
@@ -51,32 +55,37 @@ public class UserController {
 				linkTo(methodOn(UserController.class).getAllUsers()).withSelfRel());
 	}
 
+	@ApiOperation(value = "Get a User by Username")
 	@GetMapping("/{username}")
 	public Resource<User> getUserByUsername(@PathVariable String username) {
 		return userResourceAssembler.toResource(userService.findUserByUsername(username));
 	}
 
-	@GetMapping("/{id}/followers")
-	public Resources<Resource<User>> getAllFollowersById(@PathVariable String id) {
-		List<Resource<User>> users = userService.findAllFollowers(id).stream()
+	@ApiOperation(value = "Get Follower List by User ID")
+	@GetMapping("/{userId}/followers")
+	public Resources<Resource<User>> getAllFollowersById(@PathVariable String userId) {
+		List<Resource<User>> users = userService.findAllFollowers(userId).stream()
 				.map(userResourceAssembler::toResource)
 				.collect(Collectors.toList());
 
 		return new Resources<>(users,
-				linkTo(methodOn(UserController.class).getAllFollowersById(id)).withSelfRel());
+				linkTo(methodOn(UserController.class).getAllFollowersById(userId)).withSelfRel());
 	}
 
-	@GetMapping("/{id}/following")
-	public Resources<Resource<User>> getAllFollowingById(@PathVariable String id) {
-		List<Resource<User>> users = userService.findAllFollowing(id).stream()
+	@ApiOperation(value = "Get Following List by User ID")
+	@GetMapping("/{userId}/following")
+	public Resources<Resource<User>> getAllFollowingById(@PathVariable String userId) {
+		List<Resource<User>> users = userService.findAllFollowing(userId).stream()
 				.map(userResourceAssembler::toResource)
 				.collect(Collectors.toList());
 
 		return new Resources<>(users,
-				linkTo(methodOn(UserController.class).getAllFollowingById(id)).withSelfRel());
+				linkTo(methodOn(UserController.class).getAllFollowingById(userId)).withSelfRel());
 	}
 
 	///> Post Mappings
+	@ApiOperation(value = "Create a User - DEPRECATED",
+					notes = "Password won't be encrypted. Use signup action instead.")
 	@PostMapping("/create")
 	public ResponseEntity<Resource<User>> createUser(@RequestBody User user) throws URISyntaxException {
 		Resource<User> userResource = userResourceAssembler.toResource(userService.create(user));
@@ -86,6 +95,8 @@ public class UserController {
 				.body(userResource);
 	}
 
+	@ApiOperation(value = "Follow a User",
+					notes = "This operation can only be done by an authenticated user.")
 	@PostMapping("/{id}/follow")
 	public ResponseEntity<Resource<User>> followUser(@PathVariable String id) throws URISyntaxException {
 		// Todo: change user id to id from principal object
@@ -97,6 +108,8 @@ public class UserController {
 	}
 
 	///> Put Mappings
+	@ApiOperation(value = "Update a User",
+					notes = "This operation can only be done by the owner.")
 	@PutMapping("/{id}/update")
 	public ResponseEntity<Resource<User>> updateUser(@RequestBody User user,
 	                                                 @PathVariable String id) throws URISyntaxException {
@@ -108,6 +121,8 @@ public class UserController {
 	}
 
 	///> Delete Mappings
+	@ApiOperation(value = "Delete User by ID",
+					notes = "This operation can only be done by the owner.")
 	@DeleteMapping("/{id}/remove")
 	public ResponseEntity<?> deleteUser(@PathVariable String id) {
 		userService.deleteById(id);

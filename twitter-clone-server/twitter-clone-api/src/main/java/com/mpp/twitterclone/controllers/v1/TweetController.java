@@ -3,6 +3,8 @@ package com.mpp.twitterclone.controllers.v1;
 import com.mpp.twitterclone.controllers.v1.resourceassemblers.TweetResourceAssembler;
 import com.mpp.twitterclone.model.Tweet;
 import com.mpp.twitterclone.services.TweetService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -41,6 +43,8 @@ public class TweetController {
 	}
 
 	///> Get Mappings
+	@ApiOperation(value = "Get all Tweets",
+					notes = "This operation can only be done by an ADMIN.")
 	@GetMapping
 	public Resources<Resource<Tweet>> getAllTweets() {
 		List<Resource<Tweet>> tweets = tweetService.findAll().stream()
@@ -51,6 +55,8 @@ public class TweetController {
 				linkTo(methodOn(TweetController.class).getAllTweets()).withSelfRel());
 	}
 
+	@ApiOperation(value = "Get Tweets by Username",
+					notes = "It can be done by any user.")
 	@GetMapping("/user/{username}")
 	public Resources<Resource<Tweet>> getAllTweetsByUsername(@PathVariable String username) {
 		List<Resource<Tweet>> tweets = tweetService.findAllTweetsByUsername(username).stream()
@@ -61,11 +67,13 @@ public class TweetController {
 				linkTo(methodOn(TweetController.class).getAllTweetsByUsername(username)).withSelfRel());
 	}
 
+	@ApiOperation(value = "Get Tweet by ID")
 	@GetMapping("/{id}")
 	public Resource<Tweet> getTweetById(@PathVariable String id) {
 		return tweetResourceAssembler.toResource(tweetService.findById(id));
 	}
 
+	@ApiOperation(value = "This will get a list of all replies for a given tweet.")
 	@GetMapping("/{id}/replies")
 	public Resources<Resource<Tweet>> getTweetReplies(@PathVariable String id) {
 		List<Resource<Tweet>> tweets = tweetService.findAllReplies(id).stream()
@@ -79,6 +87,8 @@ public class TweetController {
 	// todo: getFavoriteTweets
 
 	///> Post Mappings
+	@ApiOperation(value = "Create a Tweet",
+					notes = "This operation can only be done by an authenticated user.")
 	@PostMapping("/create")
 	public ResponseEntity<Resource<Tweet>> createTweet(@RequestBody Tweet tweet) throws URISyntaxException {
 		Resource<Tweet> tweetResource = tweetResourceAssembler.toResource(tweetService.create(tweet));
@@ -88,10 +98,12 @@ public class TweetController {
 				.body(tweetResource);
 	}
 
-	@PostMapping("/{id}/reply")
-	public ResponseEntity<Resource<Tweet>> reply(@RequestBody Tweet tweet,
-	                                             @PathVariable String id) throws URISyntaxException {
-		Resource<Tweet> tweetResource = tweetResourceAssembler.toResource(tweetService.replyToTweet(tweet, id));
+	@ApiOperation(value = "Reply/Comment to/on a Tweet",
+					notes = "This operation can only be done by an authenticated user.")
+	@PostMapping("/{originalTweetId}/reply")
+	public ResponseEntity<Resource<Tweet>> reply(@RequestBody Tweet replyTweet,
+	                                             @PathVariable String originalTweetId) throws URISyntaxException {
+		Resource<Tweet> tweetResource = tweetResourceAssembler.toResource(tweetService.replyToTweet(replyTweet, originalTweetId));
 
 		return ResponseEntity
 				.created(new URI(tweetResource.getId().expand().getHref()))
@@ -107,6 +119,8 @@ public class TweetController {
 //				.body(tweetResource);
 //	}
 
+	@ApiOperation(value = "Favorite a Tweet",
+					notes = "This operation can only be done by an authenticated user.")
 	@PostMapping("/{id}/favorite")
 	public ResponseEntity<Resource<Tweet>> favorite(@PathVariable String id) throws URISyntaxException {
 		// Todo: change user id to id from principal object
@@ -118,10 +132,12 @@ public class TweetController {
 	}
 
 	///> Put Mappings
-	@PutMapping("/{id}/update")
-	public ResponseEntity<Resource<Tweet>> updateTweet(@RequestBody Tweet tweet,
-	                                                   @PathVariable String id) throws URISyntaxException {
-		Resource<Tweet> tweetResource = tweetResourceAssembler.toResource(tweetService.update(tweet, id));
+	@ApiOperation(value = "Update a Tweet",
+			notes = "This operation can only be done by an authenticated user.")
+	@PutMapping("/{originalTweetId}/update")
+	public ResponseEntity<Resource<Tweet>> updateTweet(@RequestBody Tweet newTweet,
+	                                                   @PathVariable String originalTweetId) throws URISyntaxException {
+		Resource<Tweet> tweetResource = tweetResourceAssembler.toResource(tweetService.update(newTweet, originalTweetId));
 
 		return ResponseEntity
 				.created(new URI(tweetResource.getId().expand().getHref()))
@@ -129,9 +145,11 @@ public class TweetController {
 	}
 
 	///> Delete Mappings
-	@DeleteMapping("/{id}/remove")
-	public ResponseEntity<?> deleteTweet(@PathVariable String id) {
-		tweetService.deleteById(id);
+	@ApiOperation(value = "Delete Tweet by ID",
+			notes = "This operation can only be done by the owner of the tweet.")
+	@DeleteMapping("/{tweetId}/remove")
+	public ResponseEntity<?> deleteTweet(@PathVariable String tweetId) {
+		tweetService.deleteById(tweetId);
 
 		Map<String, String> responseMessage = new HashMap<>();
 		responseMessage.put("message", "Tweet Removed Successfully");
