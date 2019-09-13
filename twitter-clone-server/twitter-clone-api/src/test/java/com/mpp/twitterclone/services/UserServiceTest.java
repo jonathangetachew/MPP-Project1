@@ -1,5 +1,6 @@
 package com.mpp.twitterclone.services;
 
+import com.mpp.twitterclone.exceptions.ResourceNotFoundException;
 import com.mpp.twitterclone.model.Follow;
 import com.mpp.twitterclone.model.User;
 import com.mpp.twitterclone.repositories.FollowRepository;
@@ -107,11 +108,10 @@ class UserServiceTest {
 		String invalidId = "Invalid ID";
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			userService.findById(invalidId);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.findById(invalidId);
+		});
 	}
 
 	@Test
@@ -180,11 +180,10 @@ class UserServiceTest {
 		User editedUser = User.builder().id(ID).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			userService.update(editedUser, invalidId);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.update(editedUser, invalidId);
+		});
 	}
 
 	@Test
@@ -193,55 +192,51 @@ class UserServiceTest {
 		User userToDelete = User.builder().id(ID).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			userService.delete(userToDelete);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.delete(userToDelete);
+		});
 
 		// Cannot verify because it's not an integration test and it fails before it can call the repository
 //		verify(userRepository, times(1)).delete(any(User.class));
 	}
 
 	@Test
-	void deleteTweet_InvalidTweet_ExceptionThrown() {
+	void deleteUser_InvalidUser_ExceptionThrown() {
 		//given
 		String invalidId = "Invalid ID";
 
 		User nonExistentUser = User.builder().id(invalidId).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			userService.delete(nonExistentUser);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.delete(nonExistentUser);
+		});
 	}
 
 	@Test
 	void deleteUserById_ValidID_Deleted() {
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			userService.deleteById(ID);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.deleteById(ID);
+		});
 
 		// Cannot verify because it's not an integration test and it fails before it can call the repository
 //		verify(userRepository, times(1)).deleteById(anyString());
 	}
 
 	@Test
-	void deleteTweetById_InvalidID_ExceptionThrown() {
+	void deleteUserById_InvalidID_ExceptionThrown() {
 		//given
 		String invalidId = "Invalid ID";
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			userService.deleteById(invalidId);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.deleteById(invalidId);
+		});
 	}
 
 }

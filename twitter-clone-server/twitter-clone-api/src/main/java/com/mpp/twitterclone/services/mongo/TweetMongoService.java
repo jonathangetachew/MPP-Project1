@@ -1,5 +1,6 @@
 package com.mpp.twitterclone.services.mongo;
 
+import com.mpp.twitterclone.exceptions.ResourceNotFoundException;
 import com.mpp.twitterclone.model.Favorite;
 import com.mpp.twitterclone.model.Tweet;
 import com.mpp.twitterclone.repositories.FavoriteRepository;
@@ -49,8 +50,8 @@ public class TweetMongoService implements TweetService {
 
 	@Override
 	public Tweet findById(String id) {
-		//TODO: replace with custom exception
-		return tweetRepository.findById(id).orElse(null);
+		return tweetRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Tweet"));
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class TweetMongoService implements TweetService {
 
 	@Override
 	public Tweet favoriteTweet(String tweetId, String favoriteUserId) {
-		// Original Tweet
+		// Original Tweet - if not found then findById() will throw the exception
 		Tweet favoritedTweet = findById(tweetId);
 
 		// Check for retweet record
@@ -114,12 +115,14 @@ public class TweetMongoService implements TweetService {
 
 					return tweetRepository.save(t);
 				})
-				// TODO: Replace with custom exception
-				.orElse(null);
+				.orElseThrow(() -> new ResourceNotFoundException("Tweet"));
 	}
 
 	@Override
 	public void delete(Tweet tweet) {
+		/**
+		 * Not accessible for controller endpoint
+		 */
 		// Check if the Tweet exists in db
 		findById(tweet.getId());
 

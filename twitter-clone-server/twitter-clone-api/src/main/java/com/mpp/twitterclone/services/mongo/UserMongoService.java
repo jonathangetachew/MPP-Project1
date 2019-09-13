@@ -1,14 +1,19 @@
 package com.mpp.twitterclone.services.mongo;
 
+import com.mpp.twitterclone.exceptions.ResourceExistsException;
+import com.mpp.twitterclone.exceptions.ResourceNotFoundException;
 import com.mpp.twitterclone.model.Follow;
+import com.mpp.twitterclone.model.Role;
 import com.mpp.twitterclone.model.User;
 import com.mpp.twitterclone.repositories.FollowRepository;
 import com.mpp.twitterclone.repositories.UserRepository;
 import com.mpp.twitterclone.services.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -50,20 +55,38 @@ public class UserMongoService implements UserService {
 
 	@Override
 	public User findById(String id) {
-		// Todo: implement exception handling
-		return userRepository.findById(id).orElse(null);
+		return userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("User"));
 	}
 
 	@Override
 	public User findUserByUsername(String username) {
-		// Todo: implement exception handling
-		return userRepository.findByUsername(username).orElse(null);
+		return userRepository.findByUsername(username)
+				.orElseThrow(() -> new ResourceNotFoundException("User"));
 	}
 
 	@Override
-	public User create(User user) {
-		// Todo: fix - lookup other project
-		return userRepository.insert(user);
+	public User create(User newUser) {
+
+//		User user = userRepository.findByUsername(newUser.getUsername()).get();
+
+//		if ( user == null ) {
+			// Encrypt User's Password
+//			newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+//
+//			// Assign Roles as Objects because they're sent as an array of strings in the request
+//			Set<Role> userRoles = new HashSet<>();
+//			for (Role role : newUser.getRoles()) {
+//				Role role1 = roleService.findRole(role.getRole());
+//				if ( role1 == null ) throw new ResourceNotFoundException("Role " + role.getRole());
+//				userRoles.add(role1);
+//			}
+
+//			newUser.setRoles(userRoles);
+
+			return userRepository.insert(newUser);
+//		}
+//		else throw new ResourceExistsException("User " + newUser.getUsername());
 	}
 
 	@Override
@@ -103,8 +126,9 @@ public class UserMongoService implements UserService {
 				.map(u -> {
 
 					// TODO: check if user performing the update is the owner
-					// TODO: check it the the new username/email isn't already taken
+					// TODO: check if the the new username/email isn't already taken
 					u.setUsername(newUser.getUsername());
+
 					u.setPassword(newUser.getPassword());
 					u.setName(newUser.getName());
 					u.setEmail(newUser.getEmail());
@@ -124,12 +148,14 @@ public class UserMongoService implements UserService {
 					return userRepository.save(u);
 
 				})
-				// Todo: implement exception handling
-				.orElse(null);
+				.orElseThrow(() -> new ResourceNotFoundException("User"));
 	}
 
 	@Override
 	public void delete(User user) {
+		/**
+		 * Not accessible for controller endpoint
+		 */
 		// Check if the Tweet exists in db
 		findById(user.getId());
 

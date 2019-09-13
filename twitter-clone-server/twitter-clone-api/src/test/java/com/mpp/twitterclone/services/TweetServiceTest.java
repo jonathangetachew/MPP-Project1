@@ -1,5 +1,6 @@
 package com.mpp.twitterclone.services;
 
+import com.mpp.twitterclone.exceptions.ResourceNotFoundException;
 import com.mpp.twitterclone.model.Favorite;
 import com.mpp.twitterclone.model.Tweet;
 import com.mpp.twitterclone.model.tweetcontents.TextContent;
@@ -112,11 +113,10 @@ class TweetServiceTest {
 		String invalidId = "Invalid ID";
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			tweetService.findById(invalidId);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.findById(invalidId);
+		});
 	}
 
 	@Test
@@ -205,11 +205,10 @@ class TweetServiceTest {
 		Tweet editedTweet = Tweet.builder().id(ID).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			tweetService.update(editedTweet, invalidId);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.update(editedTweet, invalidId);
+		});
 	}
 
 	@Test
@@ -218,11 +217,10 @@ class TweetServiceTest {
 		Tweet tweetToDelete = Tweet.builder().id(ID).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			tweetService.delete(tweetToDelete);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.delete(tweetToDelete);
+		});
 
 		// Cannot verify because it's not an integration test and it fails before it can call the repository
 //		verify(tweetRepository, times(1)).delete(any(Tweet.class));
@@ -236,21 +234,19 @@ class TweetServiceTest {
 		Tweet nonExistentTweet = Tweet.builder().id(invalidId).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			tweetService.delete(nonExistentTweet);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.delete(nonExistentTweet);
+		});
 	}
 
 	@Test
 	void deleteTweetById_ValidID_Deleted() {
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			tweetService.deleteById(ID);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.deleteById(ID);
+		});
 
 		// Cannot verify because it's not an integration test and it fails before it can call the repository
 //		verify(tweetRepository, times(1)).deleteById(anyString());
@@ -262,10 +258,9 @@ class TweetServiceTest {
 		String invalidId = "Invalid ID";
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			tweetService.deleteById(invalidId);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.deleteById(invalidId);
+		});
 	}
 }
