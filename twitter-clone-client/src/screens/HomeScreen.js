@@ -11,8 +11,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import ReactResizeDetector from 'react-resize-detector';
 
-import { MonoText } from '../components/StyledText';
+import { isMobile } from 'react-device-detect';
+import SideMenu from '../components/SideMenu.web';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -27,40 +29,37 @@ export default class HomeScreen extends React.Component {
     await AsyncStorage.clear();
     this.props.navigation.navigate('Auth');
   };
-  
-  render(){
+
+  renderRightComponent() {
     return (
-      <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                require('../../assets/images/nyan1.svg')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
-        </ScrollView>
-  
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>
-            This is a tab bar. You can edit it in:
-          </Text>
-  
-          <View
-            style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>
-              navigation/MainTabNavigator.js
-            </MonoText>
-          </View>
-          <View>
-            <Button title="Show me more of the app" onPress={this._showMoreApp} />
-            <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
-          </View>
-        </View>
+      <View style={{ flex: 1 }}>
+        <Text>asd</Text>
       </View>
+    );
+  }
+
+  render() {
+    return (
+      <ReactResizeDetector>
+        {({width, height}) => (
+          <View style={styles.container}>
+            {Platform.OS == "web" && <SideMenu />}
+            <ScrollView
+              style={{ flex: 2 }}
+              contentContainerStyle={styles.contentContainer}>
+              <View style={styles.welcomeContainer}>
+                <Image
+                  source={
+                    require('../../assets/images/nyan1.svg')
+                  }
+                  style={styles.welcomeImage}
+                />
+              </View>
+            </ScrollView>
+            {(Platform.OS == "web" && !isMobile) && this.renderRightComponent()}
+          </View>
+        )}
+      </ReactResizeDetector>
     );
   }
 }
@@ -68,7 +67,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    flexDirection: 'row'
   },
   developmentModeText: {
     marginBottom: 20,
@@ -79,6 +78,8 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 30,
+    flex: 2,
+    backgroundColor: 'red',
   },
   welcomeContainer: {
     alignItems: 'center',

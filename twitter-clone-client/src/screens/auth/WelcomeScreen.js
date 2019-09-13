@@ -47,7 +47,7 @@ export default class WelcomeScreen extends React.PureComponent {
                 <View style={[styles.wrapper, { padding: 60, alignItems: 'stretch' }]}>
                     <Text h2 h2Style={styles.h2Style}>You're almost there with the shiny TwitterClone</Text>
                     <Text h3 h3Style={styles.h3Style}>We are in development of the following features:</Text>
-                    <FeatureItem name="search" title="Explore" subtitle="Get the trends, news, videos in one place." />
+                    <FeatureItem name="hashtag" title="Explore" subtitle="Get the trends, news, videos in one place." />
                     <FeatureItem name="bookmark" title="Bookmark" subtitle="Save content to enjoy later." />
                     <FeatureItem name="edit" title="Personalize" subtitle="Costomize you experience." />
                 </View>

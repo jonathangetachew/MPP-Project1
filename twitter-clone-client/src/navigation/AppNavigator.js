@@ -1,4 +1,5 @@
-import { createAppContainer } from 'react-navigation';
-import CommonNavigator from './CommonNavigator';
+import { createAppContainer, createDrawerNavigator } from 'react-navigation';
 
-export default createAppContainer(CommonNavigator);
+import SideMenu from '../components/SideMenu';
+
+export default createAppContainer(SideMenu);

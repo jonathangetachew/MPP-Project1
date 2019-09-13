@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoundButton renders the button 1`] = `
+<Button
+  buttonStyle={
+    Array [
+      Object {
+        "borderRadius": 20,
+      },
+      undefined,
+    ]
+  }
+/>
+`;
