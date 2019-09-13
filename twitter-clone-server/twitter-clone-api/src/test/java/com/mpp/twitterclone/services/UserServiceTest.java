@@ -24,6 +24,7 @@ class UserServiceTest {
 
 	public static final String ID = "user1";
 	public static final String USERNAME = "username";
+
 	UserService userService;
 
 	@Mock
