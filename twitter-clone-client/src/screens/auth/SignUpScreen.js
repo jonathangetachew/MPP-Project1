@@ -1,21 +1,31 @@
 import React from "react";
-import { Image, Button, KeyboardAvoidingView, View, Text, Platform, ScrollView } from "react-native";
+import {
+  Image,
+  Button,
+  KeyboardAvoidingView,
+  View,
+  Text,
+  Platform,
+  ScrollView
+} from "react-native";
 import { Header } from "react-navigation";
 import { Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Colors from "../../constants/Colors";
 import RoundButton from "../../components/RoundButton";
-import LogoTitle from "../../components/LogoTitle"
-import DatePicker from 'react-native-datepicker'
+import DatePicker from "react-native-datepicker";
+import ReactResizeDetector from "react-resize-detector";
 
-const Label = (props) => (
-  <Text style={{fontSize: 16, color: Colors.labelColor, fontWeight: 'bold'}}>{props.children}</Text>
+const Label = props => (
+  <Text style={{ fontSize: 16, color: Colors.labelColor, fontWeight: "bold" }}>
+    {props.children}
+  </Text>
 );
 
-const LoginHeader = (props) => (
+const LoginHeader = props => (
   <View
     style={{
-      flex:1,
+      flex: 1,
       alignItems: "center"
     }}
   >
@@ -38,7 +48,7 @@ export default class SignUpScreen extends React.Component {
       email: "",
       birthDate: new Date(),
       password: "",
-      confirmPassword: "",
+      confirmPassword: ""
     },
     error: {
       username: null,
@@ -48,7 +58,7 @@ export default class SignUpScreen extends React.Component {
     }
   };
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: <LoginHeader/>,
+    headerTitle: <LoginHeader />,
     header: Platform.OS != "web" ? undefined : null
   });
 
@@ -56,27 +66,30 @@ export default class SignUpScreen extends React.Component {
     return (
       <KeyboardAvoidingView
         keyboardVerticalOffset={Header.HEIGHT + 20}
-        style={{ backgroundColor: "red" }}
+        style={{backgroundColor: "green", flex:1}}
         behavior="padding"
         enabled
       >
-        <ScrollView>
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: "white",
-              alignItems: "stretch",
-              padding: Platform.OS == "web" ? undefined : "20%",
-              paddingHorizontal: Platform.OS == "web" ? "40%" : undefined
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "column",
-                alignItems: "stretch"
-              }}
-            >
-              <Text style={{ fontSize: 27, marginBottom: 20 }}>
+        <ScrollView contentContainerStyle={{flex:1, backgroundColor: "blue", paddingHorizontal:"20vw"}}>
+          <ReactResizeDetector handleWidth handleHeight>
+            {({ width, height }) => (
+              <View
+                style={{
+                  backgroundColor: "white",
+                  maxWidth: 800,
+                  flex: 1,
+                  alignSelf: "center"
+                  /*margin: Platform.OS == "web" ? undefined : "20vw",
+                  marginHorizontal:
+                    Platform.OS == "web"
+                      ? width > 900
+                        ? "35vw"
+                        : "25wvw"
+                      : undefined*/
+                }}
+              >
+                
+              <Text style={{ fontSize: 27, marginBottom: 20, marginTop: 30}}>
                 Create Your account
               </Text>
               <Input
@@ -151,11 +164,11 @@ export default class SignUpScreen extends React.Component {
               >
                 <RoundButton title="Sign up" onPress={this._signup} />
               </View>
-            </View>
-          </View>
+              </View>
+            )}
+          </ReactResizeDetector>
         </ScrollView>
       </KeyboardAvoidingView>
-  
     );
   }
 
@@ -170,25 +183,27 @@ export default class SignUpScreen extends React.Component {
   _signup = () => {
     let errorObject = {};
     if (this.state.userData.username.length == 0)
-      errorObject.username = "Please don't try to think outside the box in this system.";
-    else
-      errorObject.username = null;
-    if (this.state.userData.email.length == 0 || !this.validateEmail(this.state.userData.email))
-      errorObject.email =
-        "We need a valid email to create your account.";
-    else
-      errorObject.email = null;
+      errorObject.username =
+        "Please don't try to think outside the box in this system.";
+    else errorObject.username = null;
+    if (
+      this.state.userData.email.length == 0 ||
+      !this.validateEmail(this.state.userData.email)
+    )
+      errorObject.email = "We need a valid email to create your account.";
+    else errorObject.email = null;
     if (this.state.userData.password != this.state.userData.confirmPassword)
-      errorObject.password =
-        "The passwords don't match.";
-    else if(this.state.userData.password.length < 6)
+      errorObject.password = "The passwords don't match.";
+    else if (this.state.userData.password.length < 6)
       errorObject.password =
         "Please, make sure your password is at least 6 characters long.";
-    else
-      errorObject.password = null;
-    if (errorObject.username != null || errorObject.email != null || errorObject.password != null)
-
-      this.setState({error:errorObject});
+    else errorObject.password = null;
+    if (
+      errorObject.username != null ||
+      errorObject.email != null ||
+      errorObject.password != null
+    )
+      this.setState({ error: errorObject });
     else {
       console.log(this.state.userData);
       this.props.navigation.navigate("SignIn");
