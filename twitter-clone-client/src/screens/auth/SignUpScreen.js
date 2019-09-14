@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Image,
-  Button,
   KeyboardAvoidingView,
   View,
   Text,
@@ -9,12 +8,12 @@ import {
   ScrollView
 } from "react-native";
 import { Header } from "react-navigation";
-import { Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Colors from "../../constants/Colors";
 import RoundButton from "../../components/RoundButton";
 import DatePicker from "react-native-datepicker";
 import ReactResizeDetector from "react-resize-detector";
+import { default as Input } from "../../components/RespectFlexInput";
 
 const Label = props => (
   <Text style={{ fontSize: 16, color: Colors.labelColor, fontWeight: "bold" }}>
@@ -66,104 +65,128 @@ export default class SignUpScreen extends React.Component {
     return (
       <KeyboardAvoidingView
         keyboardVerticalOffset={Header.HEIGHT + 20}
-        style={{backgroundColor: "green", flex:1}}
+        style={{ flex: 1 }}
         behavior="padding"
         enabled
       >
-        <ScrollView contentContainerStyle={{flex:1, backgroundColor: "blue", paddingHorizontal:"20vw"}}>
+        <ScrollView
+          contentContainerStyle={{ marginHorizontal: "20%" }}
+        >
           <ReactResizeDetector handleWidth handleHeight>
             {({ width, height }) => (
               <View
                 style={{
-                  backgroundColor: "white",
-                  maxWidth: 800,
+                  maxWidth: 500,
                   flex: 1,
-                  alignSelf: "center"
-                  /*margin: Platform.OS == "web" ? undefined : "20vw",
-                  marginHorizontal:
-                    Platform.OS == "web"
-                      ? width > 900
-                        ? "35vw"
-                        : "25wvw"
-                      : undefined*/
+                  marginHorizontal: "auto",
+                  width: "100%"
                 }}
               >
-                
-              <Text style={{ fontSize: 27, marginBottom: 20, marginTop: 30}}>
-                Create Your account
-              </Text>
-              <Input
-                label="Username"
-                autoFocus={true}
-                errorMessage={this.state.error.username}
-                leftIcon={
-                  <Icon
-                    name="user"
-                    size={24}
-                    color={Colors.primaryColor}
-                    style={{ marginRight: 8 }}
+                <Text style={{ fontSize: 27, marginBottom: 20, marginTop: 30 }}>
+                  Create Your account
+                </Text>
+                <Input
+                  label="Username"
+                  autoFocus={true}
+                  errorMessage={this.state.error.username}
+                  leftIcon={
+                    <Icon
+                      name="user"
+                      size={24}
+                      color={Colors.primaryColor}
+                      style={{ marginRight: 8 }}
+                    />
+                  }
+                  maxLength={20}
+                  textContentType="username"
+                  onChangeText={value =>
+                    this.setState({
+                      userData: { ...this.state.userData, username: value }
+                    })
+                  }
+                  value={this.state.userData.username}
+                />
+                <Input
+                  label="Email address"
+                  errorMessage={this.state.error.email}
+                  leftIcon={
+                    <Icon
+                      name="envelope"
+                      size={24}
+                      color={Colors.primaryColor}
+                      style={{ marginRight: 8 }}
+                    />
+                  }
+                  onChangeText={value =>
+                    this.setState({
+                      userData: { ...this.state.userData, email: value }
+                    })
+                  }
+                  value={this.state.userData.email}
+                />
+                <Input
+                  label="Password"
+                  leftIcon={
+                    <Icon
+                      name="lock"
+                      size={24}
+                      color={Colors.primaryColor}
+                      style={{ marginRight: 8 }}
+                    />
+                  }
+                  textContentType="password"
+                  secureTextEntry={true}
+                  onChangeText={value =>
+                    this.setState({
+                      userData: { ...this.state.userData, password: value }
+                    })
+                  }
+                />
+                <Input
+                  label="Confirm Password"
+                  errorMessage={this.state.error.password}
+                  leftIcon={
+                    <Icon
+                      name="lock"
+                      size={24}
+                      color={Colors.primaryColor}
+                      style={{ marginRight: 8 }}
+                    />
+                  }
+                  textContentType="password"
+                  secureTextEntry={true}
+                  onChangeText={value =>
+                    this.setState({
+                      userData: {
+                        ...this.state.userData,
+                        confirmPassword: value
+                      }
+                    })
+                  }
+                />
+                <View style={{ paddingHorizontal: 10 }}>
+                  <Label>Date Of Birth</Label>
+                  <DatePicker
+                    maxDate={new Date()}
+                    date={this.state.userData.birthDate}
+                    style={{borderBottomWidth: 1, borderColor: Colors.labelColor}}
+                    customStyles={{dateInput:{border: 0, borderColor: "transparent"}}}
+                    onDateChange={date => {
+                      this.setState({
+                        userData: { ...this.state.userData, birthDate: date }
+                      });
+                    }}
                   />
-                }
-                maxLength={20}
-                textContentType="username"
-                onChangeText={value => this.setState({ userData: {...this.state.userData, username: value} })}
-                value={this.state.userData.username}
-              />
-              <Input
-                label="Email address"
-                errorMessage={this.state.error.email}
-                leftIcon={
-                  <Icon
-                    name="envelope"
-                    size={24}
-                    color={Colors.primaryColor}
-                    style={{ marginRight: 8 }}
-                  />
-                }
-                onChangeText={value => this.setState({ userData: {...this.state.userData, email: value }})}
-                value={this.state.userData.email}
-              />
-              <Input
-                label="Password"
-                leftIcon={
-                  <Icon
-                    name="lock"
-                    size={24}
-                    color={Colors.primaryColor}
-                    style={{ marginRight: 8 }}
-                  />
-                }
-                textContentType="password"
-                secureTextEntry={true}
-                onChangeText={value => this.setState({ userData: {...this.state.userData, password: value} })}
-              />
-              <Input
-                label="Confirm Password"
-                errorMessage={this.state.error.password}
-                leftIcon={
-                  <Icon
-                    name="lock"
-                    size={24}
-                    color={Colors.primaryColor}
-                    style={{ marginRight: 8 }}
-                  />
-                }
-                textContentType="password"
-                secureTextEntry={true}
-                onChangeText={value => this.setState({ userData: {...this.state.userData, confirmPassword: value} })}
-              />
-              <Label>Date Of Birth</Label>
-              <DatePicker maxDate={new Date()} date={this.state.userData.birthDate} onDateChange={(date) => {this.setState({userData: {...this.state.userData, birthDate: date}})}}/>
-              <View style={{ margin: 7 }} />
-
-              <View
-                style={{
-                  justifyContent: "center",
-                  alignItems: "stretch"
-                }}
-              >
-                <RoundButton title="Sign up" onPress={this._signup} />
-              </View>
+                </View>
+                <View
+                  style={{
+                    marginTop: 14,
+                    justifyContent: "center",
+                    alignItems: "stretch"
+                  }}
+                >
+                  <RoundButton title="Sign up" onPress={this._signup} />
+                </View>
               </View>
             )}
           </ReactResizeDetector>
