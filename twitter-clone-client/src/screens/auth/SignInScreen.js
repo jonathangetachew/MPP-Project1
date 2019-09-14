@@ -68,7 +68,7 @@ export default class SignInScreen extends React.Component {
     return (
       <KeyboardAvoidingView
         keyboardVerticalOffset={Header.HEIGHT + 20}
-        style={{ backgroundColor: "red" }}
+        style={{ }}
         behavior="padding"
         enabled
       >
