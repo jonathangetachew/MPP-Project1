@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,7 @@ public class UserController {
 	}
 
 	///> Post Mappings
-	@ApiOperation(value = "Create a User - DEPRECATED",
+	@ApiOperation(value = "Create a User",
 					notes = "Password won't be encrypted. Use signup action instead.")
 	@PostMapping("/create")
 	public ResponseEntity<Resource<User>> createUser(@RequestBody User user) throws URISyntaxException {
@@ -112,8 +113,9 @@ public class UserController {
 					notes = "This operation can only be done by the owner.")
 	@PutMapping("/{id}/update")
 	public ResponseEntity<Resource<User>> updateUser(@RequestBody User user,
-	                                                 @PathVariable String id) throws URISyntaxException {
-		Resource<User> userResource = userResourceAssembler.toResource(userService.update(user, id));
+	                                                 @PathVariable String id,
+	                                                 Principal principal) throws URISyntaxException {
+		Resource<User> userResource = userResourceAssembler.toResource(userService.update(user, id, principal.getName()));
 
 		return ResponseEntity
 				.created(new URI(userResource.getId().expand().getHref()))
@@ -124,8 +126,8 @@ public class UserController {
 	@ApiOperation(value = "Delete User by ID",
 					notes = "This operation can only be done by the owner.")
 	@DeleteMapping("/{id}/remove")
-	public ResponseEntity<?> deleteUser(@PathVariable String id) {
-		userService.deleteById(id);
+	public ResponseEntity<?> deleteUser(@PathVariable String id, Principal principal) {
+		userService.deleteById(id, principal.getName());
 
 		Map<String, String> responseMessage = new HashMap<>();
 		responseMessage.put("message", "User Removed Successfully");

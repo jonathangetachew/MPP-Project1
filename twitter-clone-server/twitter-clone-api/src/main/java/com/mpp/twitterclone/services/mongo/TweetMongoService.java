@@ -7,9 +7,9 @@ import com.mpp.twitterclone.repositories.FavoriteRepository;
 import com.mpp.twitterclone.repositories.RetweetRepository;
 import com.mpp.twitterclone.repositories.TweetRepository;
 import com.mpp.twitterclone.services.TweetService;
+import com.mpp.twitterclone.validators.UserActionValidator;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,13 +24,15 @@ public class TweetMongoService implements TweetService {
 
 	private final FavoriteRepository favoriteRepository;
 
-	private final RetweetRepository retweetRepository;
+	private final UserActionValidator userActionValidator;
+
+
 
 	public TweetMongoService(TweetRepository tweetRepository, FavoriteRepository favoriteRepository,
-	                         RetweetRepository retweetRepository) {
+	                         UserActionValidator userActionValidator) {
 		this.tweetRepository = tweetRepository;
 		this.favoriteRepository = favoriteRepository;
-		this.retweetRepository = retweetRepository;
+		this.userActionValidator = userActionValidator;
 	}
 
 	@Override
@@ -94,17 +96,18 @@ public class TweetMongoService implements TweetService {
 			favoritedTweet.setFavoriteCount(++currentFavoriteCount);
 		}
 
-		return update(favoritedTweet, tweetId);
+		return update(favoritedTweet, tweetId, favoriteUserId);
 
 	}
 
 	@Override
-	public Tweet update(Tweet newTweet, String oldTweetId) {
+	public Tweet update(Tweet newTweet, String oldTweetId, String currentUsername) {
 
 		return tweetRepository.findById(oldTweetId)
 				.map(t -> {
 
-					// TODO: check if user performing the update is the owner
+					// Check if user performing the update is the owner
+					userActionValidator.validateUserAction(currentUsername, t.getOwner());
 
 					t.setContent(newTweet.getContent());
 					t.setRetweetCount(newTweet.getRetweetCount());
@@ -119,7 +122,7 @@ public class TweetMongoService implements TweetService {
 	}
 
 	@Override
-	public void delete(Tweet tweet) {
+	public void delete(Tweet tweet, String currentUsername) {
 		/**
 		 * Not accessible for controller endpoint
 		 */
@@ -130,11 +133,12 @@ public class TweetMongoService implements TweetService {
 	}
 
 	@Override
-	public void deleteById(String id) {
-		// TODO: check if user performing action is the owner
-
+	public void deleteById(String id, String currentUsername) {
 		// Check if the Tweet exists in db
-		findById(id);
+		Tweet tweet = findById(id);
+
+		// Check if user performing action is the owner
+		userActionValidator.validateUserAction(currentUsername, tweet.getOwner());
 
 		tweetRepository.deleteById(id);
 	}
