@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,8 +137,10 @@ public class TweetController {
 			notes = "This operation can only be done by an authenticated user.")
 	@PutMapping("/{originalTweetId}/update")
 	public ResponseEntity<Resource<Tweet>> updateTweet(@RequestBody Tweet newTweet,
-	                                                   @PathVariable String originalTweetId) throws URISyntaxException {
-		Resource<Tweet> tweetResource = tweetResourceAssembler.toResource(tweetService.update(newTweet, originalTweetId));
+	                                                   @PathVariable String originalTweetId,
+	                                                   Principal principal) throws URISyntaxException {
+		Resource<Tweet> tweetResource = tweetResourceAssembler.toResource(tweetService.update(newTweet, originalTweetId,
+																								principal.getName()));
 
 		return ResponseEntity
 				.created(new URI(tweetResource.getId().expand().getHref()))
@@ -148,8 +151,8 @@ public class TweetController {
 	@ApiOperation(value = "Delete Tweet by ID",
 			notes = "This operation can only be done by the owner of the tweet.")
 	@DeleteMapping("/{tweetId}/remove")
-	public ResponseEntity<?> deleteTweet(@PathVariable String tweetId) {
-		tweetService.deleteById(tweetId);
+	public ResponseEntity<?> deleteTweet(@PathVariable String tweetId, Principal principal) {
+		tweetService.deleteById(tweetId, principal.getName());
 
 		Map<String, String> responseMessage = new HashMap<>();
 		responseMessage.put("message", "Tweet Removed Successfully");

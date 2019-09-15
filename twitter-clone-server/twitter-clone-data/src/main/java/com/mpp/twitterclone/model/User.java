@@ -1,7 +1,9 @@
 package com.mpp.twitterclone.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mpp.twitterclone.enums.Gender;
+import com.mpp.twitterclone.enums.RoleName;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
@@ -12,13 +14,15 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.hateoas.core.Relation;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Jonathan on 9/8/2019.
@@ -28,7 +32,7 @@ import java.util.Set;
 @Builder
 @Document(collection = "users")
 @Relation(collectionRelation = "users") // To rename the default spring HATEOAS embedded list
-public class User {
+public class User implements UserDetails {
 	@Id
 	private String id;
 
@@ -83,11 +87,48 @@ public class User {
 	private Integer friendsCount = 0;
 
 	@DBRef
-	@NotEmpty(message = "Roles are Required")
-	private Set<Role> roles;
+	@Builder.Default
+	private Set<Role> roles = new HashSet<>(Arrays.asList(Role.builder().name(RoleName.USER).build()));
 
 	@Field(value = "created_at")
 	@CreatedDate
 	@Builder.Default
 	private LocalDateTime createdAt = LocalDateTime.now();
+
+	private List<GrantedAuthority> getUserAuthority(Set<Role> userRoles) {
+		Set<GrantedAuthority> roles = new HashSet<>();
+		userRoles.forEach(role -> roles.add(new SimpleGrantedAuthority(role.getName().toString())));
+
+		return new ArrayList<>(roles);
+	}
+
+	@JsonIgnore
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return getUserAuthority(getRoles());
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }

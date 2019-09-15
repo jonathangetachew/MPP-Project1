@@ -1,6 +1,8 @@
 package com.mpp.twitterclone.controllers.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mpp.twitterclone.config.AuthEntryPoint;
+import com.mpp.twitterclone.config.JwtTokenProvider;
 import com.mpp.twitterclone.controllers.v1.resourceassemblers.UserResourceAssembler;
 import com.mpp.twitterclone.controllers.v1.resourceassemblers.UserResourceAssemblerImpl;
 import com.mpp.twitterclone.model.User;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -29,13 +32,14 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
+@WithMockUser(value = UserControllerTest.USERNAME, authorities = "USER")
 class UserControllerTest {
-
 
 	public static final String USERNAME = "john";
 
@@ -44,6 +48,16 @@ class UserControllerTest {
 		@Bean
 		public UserResourceAssembler userResourceAssembler() {
 			return new UserResourceAssemblerImpl();
+		}
+
+		@Bean
+		public JwtTokenProvider jwtTokenProvider() {
+			return new JwtTokenProvider();
+		}
+
+		@Bean
+		public AuthEntryPoint authEntryPoint() {
+			return new AuthEntryPoint();
 		}
 	}
 
@@ -65,7 +79,10 @@ class UserControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+		mockMvc = MockMvcBuilders
+					.webAppContextSetup(webApplicationContext)
+					.apply(springSecurity())
+					.build();
 	}
 
 	@AfterEach
@@ -204,8 +221,8 @@ class UserControllerTest {
 
 		//when
 		mockMvc.perform(post(UserController.BASE_URL + "/" + ID + "/follow")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectToJsonMapper.writeValueAsBytes(followedUser)))
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectToJsonMapper.writeValueAsBytes(followedUser)))
 				//then
 				.andExpect(status().isCreated())
 				.andExpect(content().contentType(MediaTypes.HAL_JSON_UTF8))
@@ -226,7 +243,7 @@ class UserControllerTest {
 		//given
 		User user = User.builder().id(ID).username(USERNAME).build();
 
-		when(userService.update(any(User.class), anyString())).thenReturn(user);
+		when(userService.update(any(User.class), anyString(), anyString())).thenReturn(user);
 
 		//when
 		mockMvc.perform(put(UserController.BASE_URL + "/" + ID + "/update")
@@ -259,6 +276,6 @@ class UserControllerTest {
 				// Test JSON
 				.andExpect(jsonPath("$.message", is(userRemovedMessage)));
 
-		verify(userService, times(1)).deleteById(anyString());
+		verify(userService, times(1)).deleteById(anyString(), anyString());
 	}
 }
