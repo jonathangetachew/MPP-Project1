@@ -1,5 +1,5 @@
-import * as WebBrowser from "expo-web-browser";
-import React from "react";
+import * as WebBrowser from 'expo-web-browser';
+import React from 'react';
 import {
   AsyncStorage,
   Button,
@@ -9,36 +9,41 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
-} from "react-native";
+  View,
+} from 'react-native';
 
 import { MonoText } from '../components/StyledText';
 import TweetList from '../components/TweetList';
 import MySearchBar from '../components/MySearchBar';
+export default class SearchResultScreen extends React.Component {
 
-export default class HomeScreen extends React.Component {
+ 
+  
   static navigationOptions = {
-    header: null
+    header: null,
   };
 
   _showMoreApp = () => {
-    this.props.navigation.navigate("Other");
+    this.props.navigation.navigate('Other');
   };
 
   _signOutAsync = async () => {
     await AsyncStorage.clear();
-    this.props.navigation.navigate("Auth");
+    this.props.navigation.navigate('Auth');
   };
 
-  render() {
+  
+  render(){
     return (
-      <View style={[styles.container, { flexDirection: 'row' }]}>
-        <View style={styles.welcomeContainer}>
-          <View style={{ width: '100%', alignItems: 'center', padding: 2 }}>
-            <MySearchBar />
+      <View style={[styles.container, {flexDirection:'row'}]}>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}>
+          <View style={styles.welcomeContainer}>
+            <MySearchBar/>
+            <TweetList/>
           </View>
-          <TweetList />
-        </View>
+        </ScrollView>   
       </View>
     );
   }
@@ -47,89 +52,88 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: '#fff',
   },
   developmentModeText: {
     marginBottom: 20,
-    color: "rgba(0,0,0,0.4)",
+    color: 'rgba(0,0,0,0.4)',
     fontSize: 14,
     lineHeight: 19,
-    textAlign: "center"
+    textAlign: 'center',
   },
   contentContainer: {
-    paddingTop: 10,
+    paddingTop: 30,
   },
   welcomeContainer: {
-    flex: 1,
     alignItems: 'center',
     marginTop: 10,
-    marginBottom: 20
+    marginBottom: 20,
   },
   welcomeImage: {
     width: 100,
     height: 80,
-    resizeMode: "contain",
+    resizeMode: 'contain',
     marginTop: 3,
-    marginLeft: -10
+    marginLeft: -10,
   },
   getStartedContainer: {
-    alignItems: "center",
-    marginHorizontal: 50
+    alignItems: 'center',
+    marginHorizontal: 50,
   },
   homeScreenFilename: {
-    marginVertical: 7
+    marginVertical: 7,
   },
   codeHighlightText: {
-    color: "rgba(96,100,109, 0.8)"
+    color: 'rgba(96,100,109, 0.8)',
   },
   codeHighlightContainer: {
-    backgroundColor: "rgba(0,0,0,0.05)",
+    backgroundColor: 'rgba(0,0,0,0.05)',
     borderRadius: 3,
-    paddingHorizontal: 4
+    paddingHorizontal: 4,
   },
   getStartedText: {
     fontSize: 17,
-    color: "rgba(96,100,109, 1)",
+    color: 'rgba(96,100,109, 1)',
     lineHeight: 24,
-    textAlign: "center"
+    textAlign: 'center',
   },
   tabBarInfoContainer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     ...Platform.select({
       ios: {
-        shadowColor: "black",
+        shadowColor: 'black',
         shadowOffset: { width: 0, height: -3 },
         shadowOpacity: 0.1,
-        shadowRadius: 3
+        shadowRadius: 3,
       },
       android: {
-        elevation: 20
-      }
+        elevation: 20,
+      },
     }),
-    alignItems: "center",
-    backgroundColor: "#fbfbfb",
-    paddingVertical: 20
+    alignItems: 'center',
+    backgroundColor: '#fbfbfb',
+    paddingVertical: 20,
   },
   tabBarInfoText: {
     fontSize: 17,
-    color: "rgba(96,100,109, 1)",
-    textAlign: "center"
+    color: 'rgba(96,100,109, 1)',
+    textAlign: 'center',
   },
   navigationFilename: {
-    marginTop: 5
+    marginTop: 5,
   },
   helpContainer: {
     marginTop: 15,
-    alignItems: "center"
+    alignItems: 'center',
   },
   helpLink: {
-    paddingVertical: 15
+    paddingVertical: 15,
   },
   helpLinkText: {
     fontSize: 14,
-    color: "#2e78b7"
-  }
+    color: '#2e78b7',
+  },
 });

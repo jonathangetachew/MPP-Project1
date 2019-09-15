@@ -14,27 +14,24 @@ class TweetServiceMock extends TweetService {
     });
 
     const data = await super.getItems();
-    return data.data.items;
+   
+    return data.data.tweets;
   }
 
   async search(criteria) {
     if (criteria && typeof (criteria) == 'string' && /^[a-z0-9]+$/i.test(criteria)) {
-      const criterias = criteria.split(",");
-      mock.onGet('/search').reply(200, {
-        tweets: items.filter(item => {
-          for (let i in criterias) {
-            let c = criterias[i];
-            if (item.name.includes(c) || item.sector.includes(c)) return true;
-          }
-          return false;
-        }) //
+      
+      console.log('mock',items,`/search?${criteria}`);
+      mock.onGet(`/search`).reply(200, {        
+        tweets: items.filter(item => item.name.includes(criteria) || item.body.includes(criteria))
       });
     } else {
-      mock.onGet('/search').reply(504, { message:"Invalid character set. Must be alphanum." });
+      mock.onGet(`/search`).reply(504, { message:"Invalid character set. Must be alphanum." });
     }
-
+   
     const data = await super.search(criteria);
-    return data.data.items;
+    console.log('dt',data.data.tweets);
+    return data.data.tweets;
   }
 }
 
