@@ -136,12 +136,11 @@ export default class SignInScreen extends React.Component {
                 secureTextEntry={true}
                 onChangeText={value => this.setState({ password: value })}
               />
-              <View style={{ margin: 7 }} />
-
               <View
                 style={{
                   justifyContent: "center",
-                  alignItems: "stretch"
+                  alignItems: "stretch",
+                  marginTop: 14
                 }}
               >
                 <RoundButton title="Log in!" onPress={this._signInAsync} />
