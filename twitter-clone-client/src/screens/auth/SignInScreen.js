@@ -9,11 +9,12 @@ import {
   Platform
 } from "react-native";
 import { Header } from "react-navigation";
-import { Input, CheckBox } from "react-native-elements";
+import { CheckBox } from "react-native-elements";
 import RoundButton from "../../components/RoundButton";
 import Colors from "../../constants/Colors";
 import Icon from "react-native-vector-icons/FontAwesome";
 import imageLogo from "../../../assets/images/logo.png";
+import { default as Input } from "../../components/RespectFlexInput";
 
 const LoginHeader = props => (
   <View
