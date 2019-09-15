@@ -1,21 +1,33 @@
 package com.mpp.twitterclone.controllers.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mpp.twitterclone.config.AuthEntryPoint;
+import com.mpp.twitterclone.config.JwtTokenProvider;
+import com.mpp.twitterclone.config.WebSecurityConfig;
 import com.mpp.twitterclone.controllers.v1.resourceassemblers.TweetResourceAssembler;
 import com.mpp.twitterclone.controllers.v1.resourceassemblers.TweetResourceAssemblerImpl;
+import com.mpp.twitterclone.enums.RoleName;
 import com.mpp.twitterclone.model.Tweet;
 import com.mpp.twitterclone.model.tweetcontents.TextContent;
 import com.mpp.twitterclone.services.TweetService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -29,10 +41,14 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TweetController.class)
+@WithMockUser(value = TweetControllerTest.USERNAME, authorities = "USER")
 class TweetControllerTest {
 
 	@TestConfiguration
@@ -41,6 +57,16 @@ class TweetControllerTest {
 		@Bean
 		public TweetResourceAssembler tweetResourceAssembler() {
 			return new TweetResourceAssemblerImpl();
+		}
+
+		@Bean
+		public JwtTokenProvider jwtTokenProvider() {
+			return new JwtTokenProvider();
+		}
+
+		@Bean
+		public AuthEntryPoint authEntryPoint() {
+			return new AuthEntryPoint();
 		}
 	}
 
@@ -64,7 +90,10 @@ class TweetControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+		mockMvc = MockMvcBuilders
+					.webAppContextSetup(webApplicationContext)
+					.apply(springSecurity())
+					.build();
 	}
 
 	@AfterEach
@@ -73,6 +102,7 @@ class TweetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(value = TweetControllerTest.USERNAME, authorities = "ADMIN")
 	void getAllTweets_ValidRequest_ListOfTweets() throws Exception {
 		//given
 		Tweet tweet1 = Tweet.builder().id(ID).content(Arrays.asList(new TextContent(TWEET_TEXT_CONTENT))).build();
@@ -267,7 +297,8 @@ class TweetControllerTest {
 		//given
 		Tweet tweet = Tweet.builder().id(ID).content(Arrays.asList(new TextContent(TWEET_TEXT_CONTENT))).build();
 
-		when(tweetService.update(any(Tweet.class), anyString())).thenReturn(tweet);
+//		when()
+		when(tweetService.update(any(Tweet.class), anyString(), anyString())).thenReturn(tweet);
 
 		//when
 		mockMvc.perform(put(TweetController.BASE_URL + "/" + ID + "/update")
@@ -302,6 +333,6 @@ class TweetControllerTest {
 				// Test JSON
 				.andExpect(jsonPath("$.message", is(tweetRemovedMessage)));
 
-		verify(tweetService, times(1)).deleteById(anyString());
+		verify(tweetService, times(1)).deleteById(anyString(), anyString());
 	}
 }

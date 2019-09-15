@@ -14,9 +14,9 @@ public interface CrudService<T, ID> {
 
 	T create(T object);
 
-	T update(T object, ID id);
+	T update(T object, ID id, String currentUsername);
 
-	void delete(T object);
+	void delete(T object, String currentUsername);
 
-	void deleteById(ID id);
+	void deleteById(ID id, String currentUsername);
 }

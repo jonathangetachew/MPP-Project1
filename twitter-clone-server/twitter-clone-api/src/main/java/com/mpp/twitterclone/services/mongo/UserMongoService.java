@@ -7,7 +7,11 @@ import com.mpp.twitterclone.model.Role;
 import com.mpp.twitterclone.model.User;
 import com.mpp.twitterclone.repositories.FollowRepository;
 import com.mpp.twitterclone.repositories.UserRepository;
+import com.mpp.twitterclone.services.RoleService;
 import com.mpp.twitterclone.services.UserService;
+import com.mpp.twitterclone.validators.UserActionValidator;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -27,9 +31,20 @@ public class UserMongoService implements UserService {
 
 	private final FollowRepository followRepository;
 
-	public UserMongoService(UserRepository userRepository, FollowRepository followRepository) {
+	private final RoleService roleService;
+
+	private final PasswordEncoder passwordEncoder;
+
+	private final UserActionValidator userActionValidator;
+
+	public UserMongoService(UserRepository userRepository, FollowRepository followRepository,
+	                        RoleService roleService, PasswordEncoder passwordEncoder,
+	                        @Lazy UserActionValidator userActionValidator) {
 		this.userRepository = userRepository;
+		this.roleService = roleService;
 		this.followRepository = followRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.userActionValidator = userActionValidator;
 	}
 
 	@Override
@@ -68,25 +83,29 @@ public class UserMongoService implements UserService {
 	@Override
 	public User create(User newUser) {
 
-//		User user = userRepository.findByUsername(newUser.getUsername()).get();
+		// Todo:
 
-//		if ( user == null ) {
+		User user = userRepository.findByUsername(newUser.getUsername()).orElse(null);
+
+		if ( user == null ) {
 			// Encrypt User's Password
-//			newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-//
-//			// Assign Roles as Objects because they're sent as an array of strings in the request
-//			Set<Role> userRoles = new HashSet<>();
-//			for (Role role : newUser.getRoles()) {
-//				Role role1 = roleService.findRole(role.getRole());
-//				if ( role1 == null ) throw new ResourceNotFoundException("Role " + role.getRole());
-//				userRoles.add(role1);
-//			}
+			newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
-//			newUser.setRoles(userRoles);
+			// Assign Roles as Objects because they're sent as an array of strings in the request
+			Set<Role> userRoles = new HashSet<>();
+			if (newUser.getRoles() != null) {
+				newUser.getRoles().forEach(role -> {
+					Role role1 = roleService.findRoleByName(role.getName());
+					if ( role1 == null ) throw new ResourceNotFoundException("Role");
+					userRoles.add(role1);
+				});
+			}
+
+			newUser.setRoles(userRoles);
 
 			return userRepository.insert(newUser);
-//		}
-//		else throw new ResourceExistsException("User " + newUser.getUsername());
+		}
+		else throw new ResourceExistsException("User");
 	}
 
 	@Override
@@ -117,18 +136,26 @@ public class UserMongoService implements UserService {
 			followedUser.setFollowersCount(++currentFollowerCount);
 		}
 
-		return update(followedUser, followedUserId);
+		return update(followedUser, followedUserId, followerUserId);
 	}
 
 	@Override
-	public User update(User newUser, String id) {
+	public User update(User newUser, String id, String currentUsername) {
 		return userRepository.findById(id)
 				.map(u -> {
 
-					// TODO: check if user performing the update is the owner
-					// TODO: check if the the new username/email isn't already taken
-					u.setUsername(newUser.getUsername());
+					// Check if user performing the update is the owner
+					userActionValidator.validateUserAction(currentUsername, newUser.getUsername());
 
+					User user = userRepository.findByUsername(newUser.getUsername()).orElse(null);
+
+					// Check if the the new username/email isn't already taken
+					if (user != null && !user.getId().equals(id)) {
+						if (user.getUsername() == newUser.getUsername()) throw new ResourceExistsException("Username");
+						if (user.getEmail() == newUser.getEmail()) throw new ResourceExistsException("Email");
+					}
+
+					u.setUsername(newUser.getUsername());
 					u.setPassword(newUser.getPassword());
 					u.setName(newUser.getName());
 					u.setEmail(newUser.getEmail());
@@ -152,7 +179,7 @@ public class UserMongoService implements UserService {
 	}
 
 	@Override
-	public void delete(User user) {
+	public void delete(User user, String currentUsername) {
 		/**
 		 * Not accessible for controller endpoint
 		 */
@@ -163,11 +190,12 @@ public class UserMongoService implements UserService {
 	}
 
 	@Override
-	public void deleteById(String id) {
-		// TODO: check if user performing action is the owner
-
+	public void deleteById(String id, String currentUsername) {
 		// Check if the Tweet exists in db
-		findById(id);
+		User user = findById(id);
+
+		// Check if user performing the update is the owner
+		userActionValidator.validateUserAction(currentUsername, user.getUsername());
 
 		userRepository.deleteById(id);
 	}

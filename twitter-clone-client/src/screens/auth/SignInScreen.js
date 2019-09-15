@@ -1,15 +1,49 @@
 import React from "react";
 import {
   AsyncStorage,
-  Button,
-  StyleSheet,
   View,
+  ScrollView,
+  KeyboardAvoidingView,
   Text,
-  TextInput
+  Image,
+  Platform
 } from "react-native";
-import { Input, ThemeProvider, CheckBox, Image } from "react-native-elements";
+import { Header } from "react-navigation";
+import { CheckBox } from "react-native-elements";
+import RoundButton from "../../components/RoundButton";
+import Colors from "../../constants/Colors";
 import Icon from "react-native-vector-icons/FontAwesome";
-import LogoTitle from "../../components/LogoTitle"
+import imageLogo from "../../../assets/images/logo.png";
+import { default as Input } from "../../components/RespectFlexInput";
+
+const LoginHeader = props => (
+  <View
+    style={{
+      flex: 1,
+      flexDirection: "row-reverse",
+      color: Colors.primaryColor
+    }}
+  >
+    <Image
+      source={require("../../../assets/images/logo.png")}
+      style={{
+        resizeMode: "contain",
+        width: 25,
+        height: 25,
+        marginHorizontal: 20
+      }}
+    />
+    <Text
+      h3
+      style={{ color: Colors.primaryColor, marginHorizontal: 20 }}
+      onPress={() => {
+        props.onSignupPress();
+      }}
+    >
+      Sign up
+    </Text>
+  </View>
+);
 
 export default class SignInScreen extends React.Component {
   state = {
@@ -19,80 +53,108 @@ export default class SignInScreen extends React.Component {
     passwordError: null,
     rememberMe: false
   };
-  static navigationOptions = {
-    headerTitle: <LogoTitle title="Please sign in"/>
-  };
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: navigation.getParam("headerTitle", null),
+    header: Platform.OS != "web" ? undefined : null
+  });
 
+  componentDidMount() {
+    if (Platform.OS != "web")
+      this.props.navigation.setParams({
+        headerTitle: <LoginHeader onSignupPress={this._signUp} />
+      });
+    else this.props.navigation.setParams({ header: null });
+  }
   render() {
     return (
-      <ThemeProvider>
-        <View style={{ flex: 1, padding: 100 }}>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={Header.HEIGHT + 20}
+        style={{ }}
+        behavior="padding"
+        enabled
+      >
+        <ScrollView>
           <View
-            style={{ flex: 1, flexDirection: "column", alignItems: "center" }}
+            style={{
+              flex: 1,
+              backgroundColor: "white",
+              alignItems: "stretch",
+              padding: Platform.OS == "web" ? undefined : "20%",
+              paddingHorizontal: Platform.OS == "web" ? "40%" : undefined
+            }}
           >
-            <Image
-              source={
-                require('../../../assets/images/nyan1.svg')
-              }
-              style={this.styles.welcomeImage}
-            />
-            <Text style={{ fontSize: 27 }}>Log in to Twitter Clone</Text>
-            <Input
-              label="Username"
-              autoFocus={true}
-              errorMessage={this.state.usernameError}
-              leftIcon={
-                <Icon
-                  name="user"
-                  size={24}
-                  color="black"
-                  style={{ paddingRight: 2 }}
-                />
-              }
-              textContentType="username"
-              onChangeText={value => this.setState({ username: value })}
-              value={this.state.value}
-            />
-            <Input
-              label="Password"
-              errorMessage={this.state.passwordError}
-              textContentType="password"
-              autoCompleteType="password"
-              secureTextEntry={true}
-              onChangeText={value => this.setState({ password: value })}
-            />
-            <View style={{ margin: 7 }} />
-
-            <View style={{flexDirection: "column"}}>
+            <View style={{ alignItems: "center" }}>
+              <Image
+                source={imageLogo}
+                style={{
+                  width: 95,
+                  height: 80,
+                  resizeMode: "contain",
+                  marginTop: 30
+                  //marginLeft: -10,
+                }}
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: "column",
+                alignItems: "stretch"
+              }}
+            >
+              <Text style={{ fontSize: 27, marginBottom: 20 }}>
+                Log in to TwitterClone
+              </Text>
+              <Input
+                label="Username"
+                autoFocus={true}
+                errorMessage={this.state.usernameError}
+                leftIcon={
+                  <Icon
+                    name="user"
+                    size={24}
+                    color={Colors.primaryColor}
+                    style={{ marginRight: 8 }}
+                  />
+                }
+                maxLength={20}
+                textContentType="username"
+                onChangeText={value => this.setState({ username: value })}
+                value={this.state.value}
+              />
+              <Input
+                label="Password"
+                errorMessage={this.state.passwordError}
+                leftIcon={
+                  <Icon
+                    name="lock"
+                    size={24}
+                    color={Colors.primaryColor}
+                    style={{ marginRight: 8 }}
+                  />
+                }
+                textContentType="password"
+                autoCompleteType="password"
+                secureTextEntry={true}
+                onChangeText={value => this.setState({ password: value })}
+              />
               <View
                 style={{
-                  flex: 1,
-                  flexDirection: "row",
                   justifyContent: "center",
-                  alignItems: "baseline"
+                  alignItems: "stretch",
+                  marginTop: 14
                 }}
               >
-                <Button
-                  title="Log in!"
-                  style={{ flex: 2 }}
-                  onPress={this._signInAsync}
-                />
+                <RoundButton title="Log in!" onPress={this._signInAsync} />
                 <CheckBox
                   style={{ flex: 1 }}
                   checked={this.state.rememberMe}
                   onPress={() =>
-                    this.setState({ rememberMe: !this.state.rememberMe })
+                    this.setState({
+                      rememberMe: !this.state.rememberMe
+                    })
                   }
                   title="Remember me"
                 ></CheckBox>
-                <Text
-                  style={{ color: "blue", flex: 1 }}
-                  onPress={() =>
-                    this.props.navigation.navigate("ForgotPassword")
-                  }
-                >
-                  Forgot Password
-                </Text>
               </View>
 
               <View
@@ -103,20 +165,21 @@ export default class SignInScreen extends React.Component {
                   alignItems: "center"
                 }}
               >
-                <Text style={{ flex: 1 }}>New to Twitter Clone? </Text>
-                <Text
-                  style={{ color: "blue" }}
-                  onPress={() => this.props.navigation.navigate("Signup")}
-                >
-                  Sign up now!
+                <Text style={this.styles.spacedThingyForJonathansEyes}>
+                  New to TwitterClone?
+                </Text>
+                <Text style={{ color: "blue" }} onPress={this._signUp}>
+                  Sign up
                 </Text>
               </View>
             </View>
           </View>
-        </View>
-      </ThemeProvider>
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
+
+  _signUp = () => this.props.navigation.navigate("SignUp");
 
   _signInAsync = async () => {
     let errorObject = {};
@@ -129,19 +192,21 @@ export default class SignInScreen extends React.Component {
     if (errorObject.usernameError != null || errorObject.passwordError != null)
       this.setState(errorObject);
     else {
-      this.setState({ usernameError: null, passwordError: null });
+      this.setState({
+        usernameError: null,
+        passwordError: null
+      });
       await AsyncStorage.setItem("userToken", "abc");
       this.props.navigation.navigate("App");
     }
   };
 
   styles = {
-  welcomeImage: {
-    width: 120,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  }
-  }
+    moreSpacedThingyForJonathansEyes: {
+      margin: 5
+    },
+    spacedThingyForJonathansEyes: {
+      margin: 5
+    }
+  };
 }
