@@ -14,7 +14,8 @@ class TweetServiceMock extends TweetService {
     });
 
     const data = await super.getItems();
-    return data.data.items;
+   
+    return data.data.tweets;
   }
 
   async search(criteria) {

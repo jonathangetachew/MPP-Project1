@@ -7,6 +7,7 @@ function* items(action) {
     yield put({ type: constants.GET_TWEETS_REQUEST });
     try {
         const data = yield call(tweetServiceMock.getTweets);
+       
         yield put({ type: constants.GET_TWEETS_SUCCESS, data: data.map((item, key) => !item.id ? { ...item, id: key } : item) });
     } catch (error) {
         let errorMessage = 'Error when retrieving items';
