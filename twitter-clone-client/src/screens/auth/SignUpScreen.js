@@ -11,15 +11,9 @@ import { Header } from "react-navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Colors from "../../constants/Colors";
 import RoundButton from "../../components/RoundButton";
-import DatePicker from "react-native-datepicker";
+import MyDatePicker from "../../components/MyDatePicker";
 import ReactResizeDetector from "react-resize-detector";
 import { default as Input } from "../../components/RespectFlexInput";
-
-const Label = props => (
-  <Text style={{ fontSize: 16, color: Colors.labelColor, fontWeight: "bold" }}>
-    {props.children}
-  </Text>
-);
 
 const LoginHeader = props => (
   <View
@@ -164,20 +158,26 @@ export default class SignUpScreen extends React.Component {
                     })
                   }
                 />
-                <View style={{ paddingHorizontal: 10 }}>
-                  <Label>Date Of Birth</Label>
-                  <DatePicker
-                    maxDate={new Date()}
-                    date={this.state.userData.birthDate}
-                    style={{borderBottomWidth: 1, borderColor: Colors.labelColor}}
-                    customStyles={{dateInput:{border: 0, borderColor: "transparent"}}}
-                    onDateChange={date => {
-                      this.setState({
-                        userData: { ...this.state.userData, birthDate: date }
-                      });
-                    }}
-                  />
-                </View>
+                <MyDatePicker
+                  label="Date Of Birth"
+                  errorMessage={this.state.error.birthDate}
+                  maxDate={new Date()}
+                  date={this.state.userData.birthDate}
+                  style={{borderBottomWidth: 1, borderColor: Colors.labelColor}}
+                  customStyles={{dateInput:{border: 0, borderColor: "transparent"}}}
+                  onError={err => {
+                    this.setState({
+                      error: { ...this.state.error, birthDate: err },
+                      userData: { ...this.state.userData, birthDate: null }
+                    });
+                  }}
+                  onDateChange={date => {
+                    this.setState({
+                      error: { ...this.state.error, birthDate: null },
+                      userData: { ...this.state.userData, birthDate: date }
+                    });
+                  }}
+                />
                 <View
                   style={{
                     marginTop: 14,
