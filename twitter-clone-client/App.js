@@ -48,7 +48,7 @@ export default function App(props) {
     <Provider store={storage.getStore()}>
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider>
-          <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+          <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
             {Content}
           </SafeAreaView>
         </ThemeProvider>

@@ -10,6 +10,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  StatusBar,
 } from 'react-native';
 import ReactResizeDetector from 'react-resize-detector';
 
@@ -40,14 +41,12 @@ export default class HomeScreen extends React.Component {
       <ReactResizeDetector>
         {({ width, height }) => (
           <View style={styles.container}>
-            {Platform.OS == "web" && <SideMenu onlyIcons={width < 1024 || isMobile}/>}
             <View style={styles.welcomeContainer}>
-          <View style={{ width: '100%', alignItems: 'center', padding: 2 }}>
-            <MySearchBar />
-          </View>
-          <TweetList />
-        </View>
-            {(Platform.OS == "web" && !isMobile) && this.renderRightComponent()}
+              <View style={{ width: '100%', alignItems: 'center', padding: 2, height: 40 }}>
+                <MySearchBar />
+              </View>
+              <TweetList />
+            </View>
           </View>
         )}
       </ReactResizeDetector>
@@ -58,8 +57,9 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row'
-    backgroundColor: "#fff"
+    flexDirection: 'row',
+    backgroundColor: "#fff",
+    paddingTop: StatusBar.currentHeight
   },
   developmentModeText: {
     marginBottom: 20,
@@ -70,14 +70,13 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 30,
-    flex: 2,
-    backgroundColor: 'red',
+    flex: 2
   },
   welcomeContainer: {
     flex: 1,
     alignItems: 'center',
     marginTop: 10,
-    marginBottom: 20
+    marginBottom: 2
   },
   welcomeImage: {
     width: 100,
