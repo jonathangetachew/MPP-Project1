@@ -39,7 +39,7 @@ export default class SignUpScreen extends React.Component {
     userData: {
       username: "",
       email: "",
-      birthDate: new Date(),
+      birthDate: null,
       password: "",
       confirmPassword: ""
     },
@@ -221,10 +221,15 @@ export default class SignUpScreen extends React.Component {
       errorObject.password =
         "Please, make sure your password is at least 6 characters long.";
     else errorObject.password = null;
+    if (this.state.userData.birthDate == null)
+      errorObject.birthDate =
+        "Please, check your birth date.";
+    else errorObject.birthDate = null;
     if (
       errorObject.username != null ||
       errorObject.email != null ||
-      errorObject.password != null
+      errorObject.password != null ||
+      errorObject.birthDate != null
     )
       this.setState({ error: errorObject });
     else {
