@@ -89,7 +89,7 @@ export default class WelcomeScreen extends React.PureComponent {
     }
 
     render() {
-        if(Platform.OS != "web") return this.renderOptionPane();
+        if (Platform.OS != "web") return this.renderOptionPane();
 
         return (
             <ScrollView>

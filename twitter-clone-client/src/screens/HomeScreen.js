@@ -41,9 +41,9 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <ReactResizeDetector>
-        {({width, height}) => (
+        {({ width, height }) => (
           <View style={styles.container}>
-            {Platform.OS == "web" && <SideMenu />}
+            {Platform.OS == "web" && <SideMenu onlyIcons={width < 1024 || isMobile}/>}
             <ScrollView
               style={{ flex: 2 }}
               contentContainerStyle={styles.contentContainer}>
@@ -54,6 +54,10 @@ export default class HomeScreen extends React.Component {
                   }
                   style={styles.welcomeImage}
                 />
+                <View>
+                  <Button title="Show me more of the app" onPress={this._showMoreApp} />
+                  <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
+                </View>
               </View>
             </ScrollView>
             {(Platform.OS == "web" && !isMobile) && this.renderRightComponent()}

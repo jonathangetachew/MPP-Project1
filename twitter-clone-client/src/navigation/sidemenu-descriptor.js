@@ -1,5 +1,6 @@
-import CommonNavigator from './CommonNavigator';
+import ProfileScreen from '../screens/profile/ProfileScreen';
 
 export default {
-    Home: CommonNavigator
+    Profile: ProfileScreen,
+    Home: ProfileScreen
 }

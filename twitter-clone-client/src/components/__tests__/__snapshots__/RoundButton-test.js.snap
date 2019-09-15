@@ -6,6 +6,7 @@ exports[`RoundButton renders the button 1`] = `
     Array [
       Object {
         "borderRadius": 20,
+        "marginHorizontal": 2,
       },
       undefined,
     ]
