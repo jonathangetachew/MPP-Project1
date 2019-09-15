@@ -15,7 +15,10 @@ import {
 import { MonoText } from '../components/StyledText';
 import TweetList from '../components/TweetList';
 import MySearchBar from '../components/MySearchBar';
-export default class HomeScreen extends React.Component {
+export default class SearchResultScreen extends React.Component {
+
+ 
+  
   static navigationOptions = {
     header: null,
   };
@@ -28,6 +31,7 @@ export default class HomeScreen extends React.Component {
     await AsyncStorage.clear();
     this.props.navigation.navigate('Auth');
   };
+
   
   render(){
     return (
@@ -36,7 +40,7 @@ export default class HomeScreen extends React.Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
-            <View><MySearchBar/></View>
+            <MySearchBar/>
             <TweetList/>
           </View>
         </ScrollView>   
@@ -48,7 +52,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',   
+    backgroundColor: '#fff',
   },
   developmentModeText: {
     marginBottom: 20,
@@ -58,7 +62,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   contentContainer: {
-    paddingTop: 10,
+    paddingTop: 30,
   },
   welcomeContainer: {
     alignItems: 'center',

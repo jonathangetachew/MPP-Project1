@@ -10,7 +10,7 @@ export class TweetService {
   }
 
   async search(criteria){
-    return await axios.get(`/search${criteria}`);
+    return await axios.get(`/search`);
   }
 }
 
