@@ -7,6 +7,7 @@ function* items(action) {
     yield put({ type: constants.GET_TWEETS_REQUEST });
     try {
         const data = yield call(tweetServiceMock.getTweets);
+       
         yield put({ type: constants.GET_TWEETS_SUCCESS, data: data.map((item, key) => !item.id ? { ...item, id: key } : item) });
     } catch (error) {
         let errorMessage = 'Error when retrieving items';
@@ -20,9 +21,10 @@ function* items(action) {
 
 function* searchItems(action) {
     yield put({ type: constants.SEARCH_TWEETS_REQUEST });
-
+    console.log('sage');
     try {
-        const data = yield call(tweetServiceMock.search, action.criteria);        
+        const data = yield call(tweetServiceMock.search, action.criteria);       
+        console.log('data',data); 
         yield put({ type: constants.SEARCH_TWEETS_SUCCESS, data: data.map((item, key) => !item.id ? { ...item, id: key } : item) });
     } catch (error) {
 

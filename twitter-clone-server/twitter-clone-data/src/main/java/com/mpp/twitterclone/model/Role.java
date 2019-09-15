@@ -1,7 +1,7 @@
 package com.mpp.twitterclone.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mpp.twitterclone.enums.RoleType;
+import com.mpp.twitterclone.enums.RoleName;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -22,6 +22,6 @@ public class Role {
 	private String id;
 
 	@Indexed(unique = true)
-	private RoleType role;
+	private RoleName name;
 
 }

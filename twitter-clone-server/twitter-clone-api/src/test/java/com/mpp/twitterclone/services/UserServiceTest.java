@@ -1,14 +1,21 @@
 package com.mpp.twitterclone.services;
 
+import com.mpp.twitterclone.enums.RoleName;
+import com.mpp.twitterclone.exceptions.ResourceExistsException;
+import com.mpp.twitterclone.exceptions.ResourceNotFoundException;
+import com.mpp.twitterclone.exceptions.UnauthorizedUserException;
 import com.mpp.twitterclone.model.Follow;
+import com.mpp.twitterclone.model.Role;
 import com.mpp.twitterclone.model.User;
 import com.mpp.twitterclone.repositories.FollowRepository;
 import com.mpp.twitterclone.repositories.UserRepository;
 import com.mpp.twitterclone.services.mongo.UserMongoService;
+import com.mpp.twitterclone.validators.UserActionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,12 +24,14 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class UserServiceTest {
 
 	public static final String ID = "user1";
 	public static final String USERNAME = "username";
+	public static final String EMAIL = "johndoe@mum.edu";
+
 	UserService userService;
 
 	@Mock
@@ -31,11 +40,20 @@ class UserServiceTest {
 	@Mock
 	FollowRepository followRepository;
 
+	@Mock
+	RoleService roleService;
+
+	@Mock
+	PasswordEncoder passwordEncoder;
+
+	@Mock
+	UserActionValidator userActionValidator;
+
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.initMocks(this);
 
-		userService = new UserMongoService(userRepository, followRepository);
+		userService = new UserMongoService(userRepository, followRepository, roleService, passwordEncoder, userActionValidator);
 	}
 
 	@Test
@@ -107,18 +125,19 @@ class UserServiceTest {
 		String invalidId = "Invalid ID";
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			userService.findById(invalidId);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.findById(invalidId);
+		});
 	}
 
 	@Test
 	void createUser_ValidUser_Created() {
 		//given
 		User sentUser = User.builder().id(ID).username(USERNAME).build();
+		Role sentRole = Role.builder().name(RoleName.USER).build();
 
+		when(roleService.findRoleByName(any(RoleName.class))).thenReturn(sentRole);
 		when(userRepository.insert(any(User.class))).thenReturn(sentUser);
 
 		//when
@@ -128,6 +147,7 @@ class UserServiceTest {
 		assertEquals(ID, savedUser.getId());
 		assertEquals(USERNAME, savedUser.getUsername());
 
+		assertNotNull(savedUser.getRoles());
 		assertNotNull(savedUser.getCreatedAt());
 	}
 
@@ -165,7 +185,7 @@ class UserServiceTest {
 		when(userRepository.save(any(User.class))).thenReturn(editedUser);
 
 		//when
-		User updatedUser = userService.update(editedUser, ID);
+		User updatedUser = userService.update(editedUser, ID, USERNAME);
 
 		//then
 		assertEquals(editedUser.getId(), updatedUser.getId());
@@ -180,11 +200,29 @@ class UserServiceTest {
 		User editedUser = User.builder().id(ID).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			userService.update(editedUser, invalidId);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.update(editedUser, invalidId, USERNAME);
+		});
+	}
+
+	@Test
+	void updateUser_ValidID_DuplicateUsernameAndEmail_ExceptionThrown() {
+		//given
+		String duplicateUsername = "username";
+		String id = "duplicate";
+
+		User existingUser = User.builder().id(ID).username(USERNAME).email(EMAIL).build();
+		User editedUser = User.builder().id(id).username(USERNAME).email(EMAIL).username(duplicateUsername).build();
+
+		when(userRepository.findById(anyString())).thenReturn(Optional.of(editedUser));
+		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(existingUser));
+
+		//then
+		assertThrows(ResourceExistsException.class, () -> {
+			//when
+			userService.update(editedUser, id, duplicateUsername);
+		});
 	}
 
 	@Test
@@ -193,54 +231,70 @@ class UserServiceTest {
 		User userToDelete = User.builder().id(ID).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			userService.delete(userToDelete);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.delete(userToDelete, USERNAME);
+		});
 
 		// Cannot verify because it's not an integration test and it fails before it can call the repository
 //		verify(userRepository, times(1)).delete(any(User.class));
 	}
 
 	@Test
-	void deleteTweet_InvalidTweet_ExceptionThrown() {
+	void deleteUser_InvalidUser_ExceptionThrown() {
 		//given
 		String invalidId = "Invalid ID";
 
 		User nonExistentUser = User.builder().id(invalidId).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			userService.delete(nonExistentUser);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.delete(nonExistentUser, USERNAME);
+		});
 	}
 
 	@Test
 	void deleteUserById_ValidID_Deleted() {
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			userService.deleteById(ID);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.deleteById(ID, USERNAME);
+		});
 
 		// Cannot verify because it's not an integration test and it fails before it can call the repository
 //		verify(userRepository, times(1)).deleteById(anyString());
 	}
 
 	@Test
-	void deleteTweetById_InvalidID_ExceptionThrown() {
+	void deleteUserById_InvalidID_ExceptionThrown() {
 		//given
 		String invalidId = "Invalid ID";
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			userService.deleteById(invalidId, USERNAME);
+		});
+	}
+
+	@Test
+	void deleteUserById_UnauthorizedUser_ExceptionThrown() {
+		//given
+		String unauthorizedUserName = "Unauthorized Username";
+
+		User userToBeDeleted = User.builder().id(ID).username(USERNAME).build();
+		User currentUser = User.builder().username(unauthorizedUserName).build();
+
+		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(currentUser));
+		when(userRepository.findById(anyString())).thenReturn(Optional.of(userToBeDeleted));
+
+		//then
+		// Todo: fix this
+//		verify(userActionValidator, times(1)).validateUserAction(anyString(), anyString());
+//		assertThrows(UnauthorizedUserException.class, () -> {
 //			//when
-//			userService.deleteById(invalidId);
+//			userService.deleteById(ID, unauthorizedUserName);
 //		});
 	}
 

@@ -1,12 +1,14 @@
 package com.mpp.twitterclone.services;
 
+import com.mpp.twitterclone.exceptions.ResourceNotFoundException;
+import com.mpp.twitterclone.exceptions.UnauthorizedUserException;
 import com.mpp.twitterclone.model.Favorite;
 import com.mpp.twitterclone.model.Tweet;
 import com.mpp.twitterclone.model.tweetcontents.TextContent;
 import com.mpp.twitterclone.repositories.FavoriteRepository;
-import com.mpp.twitterclone.repositories.RetweetRepository;
 import com.mpp.twitterclone.repositories.TweetRepository;
 import com.mpp.twitterclone.services.mongo.TweetMongoService;
+import com.mpp.twitterclone.validators.UserActionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -19,7 +21,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class TweetServiceTest {
 
@@ -36,13 +38,13 @@ class TweetServiceTest {
 	FavoriteRepository favoriteRepository;
 
 	@Mock
-	RetweetRepository retweetRepository;
+	UserActionValidator userActionValidator;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.initMocks(this);
 
-		tweetService = new TweetMongoService(tweetRepository, favoriteRepository, retweetRepository);
+		tweetService = new TweetMongoService(tweetRepository, favoriteRepository, userActionValidator);
 	}
 
 	@Test
@@ -112,11 +114,10 @@ class TweetServiceTest {
 		String invalidId = "Invalid ID";
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			tweetService.findById(invalidId);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.findById(invalidId);
+		});
 	}
 
 	@Test
@@ -190,7 +191,7 @@ class TweetServiceTest {
 		when(tweetRepository.save(any(Tweet.class))).thenReturn(editedTweet);
 
 		//when
-		Tweet updatedTweet = tweetService.update(editedTweet, ID);
+		Tweet updatedTweet = tweetService.update(editedTweet, ID, USERNAME);
 
 		//then
 		assertEquals(editedTweet.getId(), updatedTweet.getId());
@@ -205,11 +206,10 @@ class TweetServiceTest {
 		Tweet editedTweet = Tweet.builder().id(ID).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			tweetService.update(editedTweet, invalidId);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.update(editedTweet, invalidId, USERNAME);
+		});
 	}
 
 	@Test
@@ -218,11 +218,10 @@ class TweetServiceTest {
 		Tweet tweetToDelete = Tweet.builder().id(ID).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			tweetService.delete(tweetToDelete);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.delete(tweetToDelete, USERNAME);
+		});
 
 		// Cannot verify because it's not an integration test and it fails before it can call the repository
 //		verify(tweetRepository, times(1)).delete(any(Tweet.class));
@@ -236,21 +235,19 @@ class TweetServiceTest {
 		Tweet nonExistentTweet = Tweet.builder().id(invalidId).build();
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			tweetService.delete(nonExistentTweet);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.delete(nonExistentTweet, USERNAME);
+		});
 	}
 
 	@Test
 	void deleteTweetById_ValidID_Deleted() {
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
-//			//when
-//			tweetService.deleteById(ID);
-//		});
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.deleteById(ID, USERNAME);
+		});
 
 		// Cannot verify because it's not an integration test and it fails before it can call the repository
 //		verify(tweetRepository, times(1)).deleteById(anyString());
@@ -262,10 +259,29 @@ class TweetServiceTest {
 		String invalidId = "Invalid ID";
 
 		//then
-		//TODO: replace with custom exception
-//		assertThrows(Exception.class, () -> {
+		assertThrows(ResourceNotFoundException.class, () -> {
+			//when
+			tweetService.deleteById(invalidId, USERNAME);
+		});
+	}
+
+
+	@Test
+	void deleteUserById_UnauthorizedUser_ExceptionThrown() {
+		//given
+		String unauthorizedUserName = "Unauthorized Username";
+
+		Tweet tweetToBeDeleted = Tweet.builder().id(ID).owner(USERNAME).build();
+
+//		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(currentUser));
+		when(tweetRepository.findById(anyString())).thenReturn(Optional.of(tweetToBeDeleted));
+
+		//then
+		// Todo: fix this
+//		verify(userActionValidator, times(1)).validateUserAction(anyString(), anyString());
+//		assertThrows(UnauthorizedUserException.class, () -> {
 //			//when
-//			tweetService.deleteById(invalidId);
+//			tweetService.deleteById(ID, unauthorizedUserName);
 //		});
 	}
 }
