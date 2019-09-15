@@ -9,12 +9,17 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
-} from "react-native";
+  View,
+} from 'react-native';
+import ReactResizeDetector from 'react-resize-detector';
+
+import { isMobile } from 'react-device-detect';
+import SideMenu from '../components/SideMenu.web';
 
 import { MonoText } from '../components/StyledText';
 import TweetList from '../components/TweetList';
 import MySearchBar from '../components/MySearchBar';
+
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -32,14 +37,20 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <View style={[styles.container, { flexDirection: 'row' }]}>
-        <View style={styles.welcomeContainer}>
+      <ReactResizeDetector>
+        {({ width, height }) => (
+          <View style={styles.container}>
+            {Platform.OS == "web" && <SideMenu onlyIcons={width < 1024 || isMobile}/>}
+            <View style={styles.welcomeContainer}>
           <View style={{ width: '100%', alignItems: 'center', padding: 2 }}>
             <MySearchBar />
           </View>
           <TweetList />
         </View>
-      </View>
+            {(Platform.OS == "web" && !isMobile) && this.renderRightComponent()}
+          </View>
+        )}
+      </ReactResizeDetector>
     );
   }
 }
@@ -47,6 +58,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'row'
     backgroundColor: "#fff"
   },
   developmentModeText: {
@@ -57,7 +69,9 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   contentContainer: {
-    paddingTop: 10,
+    paddingTop: 30,
+    flex: 2,
+    backgroundColor: 'red',
   },
   welcomeContainer: {
     flex: 1,
