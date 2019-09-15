@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import constants from '../redux/actions/tweets';
 import Colors from '../constants/Colors';
 import { Text, Icon, Button } from "react-native-elements";
+import TweetCard from './TweetCard';
 class TweetList extends Component {
     constructor() {
         super();
@@ -25,62 +26,14 @@ class TweetList extends Component {
 
     renderItem = ({ item }) => {
         return (
-            <TouchableOpacity
-                style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                    marginBottom: 3
-                }}
-            >
-                <Image style={styles.profileimage}
-                    source={{ uri: item.picture }}
-                />
-                <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 15, width: 900, color: '#000000' }}>
-                        {item.name} <Text style={{ fontSize: 15, color: '#777' }}>@{item.username}</Text>
-                    </Text>
-                    <Text style={{}}>
-                        {item.body}
-                    </Text>
-                    <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around" }}>
-                        <View style={styles.iconView}>
-                            <Icon
-                                name='comment'
-                                type='font-awesome'
-                                color='#657786'
-                                size="18"
-                            />
-                            <Text style={styles.subtext}>1</Text>
-                        </View>
-                        <View style={styles.iconView}>
-                            <Icon
-                                name='retweet'
-                                type='font-awesome'
-                                color='#657786'
-                                size="18"
-                            />
-                            <Text style={styles.subtext}>1</Text>
-                        </View>
-                        <View style={styles.iconView}>
-                            <Icon
-                                name='heart'
-                                type='font-awesome'
-                                color='#657786'
-                                size="20"
-                            />
-                            <Text style={styles.subtext}>1</Text>
-                        </View>
-                     </View>
-                </View>
-            </TouchableOpacity>
+            <TweetCard {...item} />
         );
     }
 
     renderFixedHeader = () => {
         return (
             <View style={styles.header_style}>
-                <Text h2 h2Style={{ marginTop: 10, marginBottom: 3, paddingBottom: 3, fontWeight: 700, fontSize: 22, paddingLeft: 5 }}>Latest Tweets</Text>
+                <Text h2 h2Style={{ marginTop: 10, marginBottom: 3, paddingBottom: 3, fontWeight: "700", fontSize: 22, paddingLeft: 5 }}>Latest Tweets</Text>
                 <View style={{ width: '100%', height: 1, backgroundColor: '#ccc' }} />
             </View>
         );
@@ -92,7 +45,7 @@ class TweetList extends Component {
     }
 
     handleLoadMore = () => {
-        warn.log("Warn load more");
+        console.log("Warn load more");
     }
     render() {
         const { tweetData, loading, error } = this.props;
@@ -142,9 +95,10 @@ const styles = StyleSheet.create({
         paddingBottom: 15
     },
     header_style: {
+        backgroundColor: 'white',
         borderBottomWidth: 1,
         borderBottomColor: '#CCC',
-        marginLeft: 2
+        paddingHorizontal: 2
     },
     subtext: {
         marginRight: 10,

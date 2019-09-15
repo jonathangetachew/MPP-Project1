@@ -135,7 +135,6 @@ const styles = StyleSheet.create({
     color: '#424242',
     borderWidth: 0,
     borderColor: 'transparent',
-    outlineWidth: 0,
     width: 500
   }
 })

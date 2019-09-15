@@ -28,18 +28,16 @@ export default class HomeScreen extends React.Component {
     await AsyncStorage.clear();
     this.props.navigation.navigate('Auth');
   };
-  
-  render(){
+
+  render() {
     return (
-      <View style={[styles.container, {flexDirection:'row'}]}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <View><MySearchBar/></View>
-            <TweetList/>
+      <View style={[styles.container, { flexDirection: 'row' }]}>
+        <View style={styles.welcomeContainer}>
+          <View style={{ width: '100%', alignItems: 'center', padding: 2 }}>
+            <MySearchBar />
           </View>
-        </ScrollView>   
+          <TweetList />
+        </View>
       </View>
     );
   }
@@ -48,7 +46,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',   
+    backgroundColor: '#fff',
   },
   developmentModeText: {
     marginBottom: 20,
@@ -61,6 +59,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   welcomeContainer: {
+    flex: 1,
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 20,
