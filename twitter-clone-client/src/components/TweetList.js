@@ -1,25 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
     View,
     StyleSheet,
     FlatList,
-    Image,
-    ActivityIndicator,
-    TouchableOpacity
+    ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
-import constants from '../redux/actions/tweets';
-import Colors from '../constants/Colors';
-import { Text, Icon, Button } from "react-native-elements";
+import { getTweets } from '../redux/actions/tweets';
+import { Text } from "react-native-elements";
 import TweetCard from './TweetCard';
-class TweetList extends Component {
-    constructor() {
-        super();
+
+export class TweetList extends React.Component {
+    constructor(props) {
+        super(props);
         this.state = {
             dataSource: [],
             isLoading: true
         }
     }
+
     componentDidMount() {
         this.props.getTweets();
     }
@@ -31,12 +30,13 @@ class TweetList extends Component {
     }
 
     renderFixedHeader = () => {
-        return (
+        const { title } = this.props;
+        return title ? (
             <View style={styles.header_style}>
-                <Text h2 h2Style={{ marginTop: 10, marginBottom: 3, paddingBottom: 3, fontWeight: "700", fontSize: 22, paddingLeft: 5 }}>Latest Tweets</Text>
+                <Text h2 h2Style={{ marginTop: 10, marginBottom: 3, paddingBottom: 3, fontWeight: "700", fontSize: 22, paddingLeft: 5 }}>{title}</Text>
                 <View style={{ width: '100%', height: 1, backgroundColor: '#ccc' }} />
             </View>
-        );
+        ) : null;
     }
     renderSeperator = () => {
         return (
@@ -119,7 +119,5 @@ export default connect(({ tweets }) => ({
     tweetData: Object.values(tweets.data),
     loading: tweets.loading
 }), dispatch => ({
-    getTweets: () => {
-        dispatch({ type: constants.GET_TWEETS });
-    }
+    getTweets: () => dispatch(getTweets())
 }))(TweetList);

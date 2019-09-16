@@ -20,31 +20,31 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">95% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>19/20</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Branches</span>
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">90% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>9/10</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/0</span>
+        <span class='fraction'>10/10</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -66,69 +66,53 @@
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export default {
-    LOGIN: "LOGIN",
-    LOGOUT: "LOGOUT",
-    REGISTER: "REGISTER",
-    UPDATE: "UPDATE",
+<span class="cline-any cline-yes">2x</span></td><td class="text"><pre class="prettyprint lang-js">import userConstants from '../constants/user';
 &nbsp;
-    LOGIN_REQUEST: "LOGIN_REQUEST",
-    LOGIN_SUCCESS: "LOGIN_SUCCESS",
-    LOGIN_FAIL: "LOGIN_FAIL",
+export const loginRequest = () =&gt; ({ type: userConstants.LOGIN_REQUEST });
 &nbsp;
-    LOGOUT_REQUEST: "LOGOUT_REQUEST",
+export const loginSuccess = ({ token, user }) =&gt; ({ type: userConstants.LOGIN_SUCCESS, data: { token, ...user } });
 &nbsp;
-    REGISTER_REQUEST: "REGISTER_REQUEST",
-    REGISTER_SUCCESS: "REGISTER_SUCCESS",
-    REGISTER_FAIL: "REGISTER_FAIL",
+export const loginFail = (error) =&gt; ({ type: userConstants.LOGIN_FAIL, error });
 &nbsp;
-    FORGOT_PASSWORD: "FORGOT_PASSWORD",
-    FORGOT_PASSWORD_SUCCESS: "FORGOT_PASSWORD_SUCCESS",
-    FORGOT_PASSWORD_FAIL: "FORGOT_PASSWORD_FAIL",
-    RESET_PASSWORD: "RESET_PASSWORD",
+export const requestSignUp = () =&gt; ({ type: userConstants.REGISTER_REQUEST });
 &nbsp;
-    UPDATE_REQUEST: "UPDATE_REQUEST",
-    UPDATE_SUCCESS: "UPDATE_SUCCESS",
-    UPDATE_FAIL: "UPDATE_FAIL",
-}</pre></td></tr>
+export const successSignUp = ({ token, user }) =&gt; ({ type: userConstants.REGISTER_SUCCESS, data: { token, ...user } });
+&nbsp;
+export const failedSignUp = (error) =&gt; ({ type: userConstants.REGISTER_FAIL, error });
+&nbsp;
+export const logout = <span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{ type: userConstants.LOGOUT_REQUEST })</span>;
+&nbsp;
+export const updateRequest = () =&gt; ({ type: userConstants.UPDATE_REQUEST });
+&nbsp;
+export const updateSuccess = (data) =&gt; ({ type: userConstants.UPDATE_SUCCESS, data });
+&nbsp;
+export const updateFail = (error) =&gt; ({ type: userConstants.UPDATE_FAIL, error });</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-<<<<<<< HEAD
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Sep 15 2019 20:45:39 GMT-0500 (Central Daylight Time)
-=======
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Sep 15 2019 21:31:28 GMT-0500 (Central Daylight Time)
->>>>>>> feature/CA-30
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Sep 16 2019 02:41:07 GMT-0500 (Central Daylight Time)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

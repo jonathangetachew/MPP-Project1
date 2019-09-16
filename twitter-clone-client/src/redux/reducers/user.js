@@ -1,4 +1,4 @@
-import constants from '../actions/user';
+import constants from '../constants/user';
 
 export const initialState = {
   loading: false,

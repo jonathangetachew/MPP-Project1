@@ -1,4 +1,4 @@
-import constants from '../actions/tweets';
+import constants from '../constants/tweets';
 
 const initialState = {
     loading: false,

@@ -45,7 +45,7 @@ export default class HomeScreen extends React.Component {
               <View style={{ width: '100%', alignItems: 'center', padding: 2, height: 40 }}>
                 <MySearchBar />
               </View>
-              <TweetList />
+              <TweetList title={'Latest Tweets'}/>
             </View>
           </View>
         )}

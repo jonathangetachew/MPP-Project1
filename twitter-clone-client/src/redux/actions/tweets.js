@@ -1,12 +1,17 @@
-export default {
-  GET_TWEETS: 'GET_TWEETS',
+import tweetConstants from '../constants/tweets';
 
-  GET_TWEETS_REQUEST: 'GET_TWEETS_REQUEST',
-  GET_TWEETS_SUCCESS: 'GET_TWEETS_SUCCESS',
-  GET_TWEETS_FAIL: 'GET_TWEETS_FAIL',
+export const getTweets = () => ({ type: tweetConstants.GET_TWEETS });
 
-  SEARCH_TWEETS: 'SEARCH_TWEETS',
-  SEARCH_TWEETS_REQUEST: 'SEARCH_TWEETS_REQUEST',
-  SEARCH_TWEETS_SUCCESS: 'SEARCH_TWEETS_SUCCESS',
-  SEARCH_TWEETS_FAIL: 'SEARCH_TWEETS_FAIL',
-}
+export const getTweetsRequest = () => ({ type: tweetConstants.GET_TWEETS_REQUEST });
+
+export const getTweetsSuccess = (data) => ({ type: tweetConstants.GET_TWEETS_SUCCESS, data });
+
+export const getTweetsFail = (error) => ({ type: tweetConstants.GET_TWEETS_FAIL, error });
+
+export const searchTweets = (criteria) => ({ type: tweetConstants.SEARCH_TWEETS, criteria });
+
+export const searchTweetsRequest = () => ({ type: tweetConstants.SEARCH_TWEETS_REQUEST });
+
+export const searchTweetsSuccess = (data) => ({ type: tweetConstants.SEARCH_TWEETS_SUCCESS, data });
+
+export const searchTweetsFail = (error) => ({ type: tweetConstants.SEARCH_TWEETS_FAIL, error });

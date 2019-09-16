@@ -1,25 +1,21 @@
-export default {
-    LOGIN: "LOGIN",
-    LOGOUT: "LOGOUT",
-    REGISTER: "REGISTER",
-    UPDATE: "UPDATE",
+import userConstants from '../constants/user';
 
-    LOGIN_REQUEST: "LOGIN_REQUEST",
-    LOGIN_SUCCESS: "LOGIN_SUCCESS",
-    LOGIN_FAIL: "LOGIN_FAIL",
+export const loginRequest = () => ({ type: userConstants.LOGIN_REQUEST });
 
-    LOGOUT_REQUEST: "LOGOUT_REQUEST",
+export const loginSuccess = ({ token, user }) => ({ type: userConstants.LOGIN_SUCCESS, data: { token, ...user } });
 
-    REGISTER_REQUEST: "REGISTER_REQUEST",
-    REGISTER_SUCCESS: "REGISTER_SUCCESS",
-    REGISTER_FAIL: "REGISTER_FAIL",
+export const loginFail = (error) => ({ type: userConstants.LOGIN_FAIL, error });
 
-    FORGOT_PASSWORD: "FORGOT_PASSWORD",
-    FORGOT_PASSWORD_SUCCESS: "FORGOT_PASSWORD_SUCCESS",
-    FORGOT_PASSWORD_FAIL: "FORGOT_PASSWORD_FAIL",
-    RESET_PASSWORD: "RESET_PASSWORD",
+export const requestSignUp = () => ({ type: userConstants.REGISTER_REQUEST });
 
-    UPDATE_REQUEST: "UPDATE_REQUEST",
-    UPDATE_SUCCESS: "UPDATE_SUCCESS",
-    UPDATE_FAIL: "UPDATE_FAIL",
-}
+export const successSignUp = ({ token, user }) => ({ type: userConstants.REGISTER_SUCCESS, data: { token, ...user } });
+
+export const failedSignUp = (error) => ({ type: userConstants.REGISTER_FAIL, error });
+
+export const logout = () => ({ type: userConstants.LOGOUT_REQUEST });
+
+export const updateRequest = () => ({ type: userConstants.UPDATE_REQUEST });
+
+export const updateSuccess = (data) => ({ type: userConstants.UPDATE_SUCCESS, data });
+
+export const updateFail = (error) => ({ type: userConstants.UPDATE_FAIL, error });

@@ -1,31 +1,30 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import constants from '../actions/tweets';
+import constants from '../constants/tweets';
 import { store } from '../store';
 import tweetServiceMock from '../services/tweet.service.mock';
+import { getTweetsSuccess, getTweetsFail, searchTweetsRequest, getTweetsRequest, searchTweetsSuccess, searchTweetsFail } from '../actions/tweets';
 
-function* items(action) {
-    yield put({ type: constants.GET_TWEETS_REQUEST });
+export function* items(action) {
+    yield put(getTweetsRequest());
     try {
         const data = yield call(tweetServiceMock.getTweets);
-       
-        yield put({ type: constants.GET_TWEETS_SUCCESS, data: data.map((item, key) => !item.id ? { ...item, id: key } : item) });
+
+        yield put(getTweetsSuccess(data.map((item, key) => !item.id ? { ...item, id: key } : item)));
     } catch (error) {
         let errorMessage = 'Error when retrieving items';
         if (error && error.message) {
             errorMessage = error.message;
         }
 
-        yield put({ type: constants.GET_TWEETS_FAIL, error: errorMessage });
+        yield put(getTweetsFail(errorMessage));
     }
 }
 
-function* searchItems(action) {
-    yield put({ type: constants.SEARCH_TWEETS_REQUEST });
-    console.log('sage');
+export function* searchItems(action) {
+    yield put(searchTweetsRequest());
     try {
-        const data = yield call(tweetServiceMock.search, action.criteria);       
-        console.log('data',data); 
-        yield put({ type: constants.SEARCH_TWEETS_SUCCESS, data: data.map((item, key) => !item.id ? { ...item, id: key } : item) });
+        const data = yield call(tweetServiceMock.search, action.criteria);
+        yield put(searchTweetsSuccess(data.map((item, key) => !item.id ? { ...item, id: key } : item)));
     } catch (error) {
 
         let errorMessage = 'Error when retrieving items';
@@ -35,7 +34,7 @@ function* searchItems(action) {
             errorMessage = error.message;
         }
 
-        yield put({ type: constants.SEARCH_TWEETS_FAIL, error: errorMessage });
+        yield put(searchTweetsFail(errorMessage));
     }
 }
 

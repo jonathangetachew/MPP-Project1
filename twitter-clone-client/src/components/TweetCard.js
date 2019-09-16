@@ -1,30 +1,22 @@
 import React from 'react';
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
-import { Text, Icon, Avatar } from 'react-native-elements';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Avatar, Text, Icon } from 'react-native-elements';
 
-export default (props) => {
-    const { picture, name, username, body } = props;
+export default function TweetCard({ picture, name, username, body }) {
     return (
         <TouchableOpacity
-            style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'row',
-                marginBottom: 3
-            }}
+            style={styles.touchableStyle}
         >
             <Avatar
                 style={styles.profileimage}
                 source={{ uri: picture }}
             />
             <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 15, width: 900, color: '#000000' }}>
-                    {name} <Text style={{ fontSize: 15, color: '#777' }}>@{username}</Text>
-                </Text>
-                <Text style={{}}>
-                    {body}
-                </Text>
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ fontSize: 15, color: '#000000', marginRight: 5, fontWeight: 'bold' }}>{name}</Text>
+                    <Text style={{ fontSize: 15, color: '#777' }}>@{username}</Text>
+                </View>
+                <Text>{body}</Text>
                 <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around" }}>
                     <View style={styles.iconView}>
                         <Icon
@@ -57,7 +49,7 @@ export default (props) => {
             </View>
         </TouchableOpacity>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -69,6 +61,13 @@ const styles = StyleSheet.create({
         borderLeftColor: '#e6ecf0',
         borderRightWidth: 1,
         borderRightColor: '#e6ecf0',
+    },
+    touchableStyle: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        marginBottom: 3
     },
     profileimage: {
         width: 50,
