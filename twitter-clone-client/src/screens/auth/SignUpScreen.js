@@ -14,7 +14,8 @@ import RoundButton from "../../components/RoundButton";
 import MyDatePicker from "../../components/MyDatePicker";
 import ReactResizeDetector from "react-resize-detector";
 import { default as Input } from "../../components/RespectFlexInput";
-
+import { signUp } from "../../redux/actions/user";
+import { connect } from 'react-redux';
 const LoginHeader = props => (
   <View
     style={{
@@ -34,19 +35,19 @@ const LoginHeader = props => (
   </View>
 );
 
-export default class SignUpScreen extends React.Component {
+class SignUpScreen extends React.Component {
   state = {
     userData: {
       username: "",
       email: "",
-      birthDate: null,
+      dateOfBirth: null,
       password: "",
       confirmPassword: ""
     },
     error: {
       username: null,
       email: null,
-      birthDate: null,
+      dateOfBirth: null,
       password: null
     }
   };
@@ -160,21 +161,21 @@ export default class SignUpScreen extends React.Component {
                 />
                 <MyDatePicker
                   label="Date Of Birth"
-                  errorMessage={this.state.error.birthDate}
+                  errorMessage={this.state.error.dateOfBirth}
                   maxDate={new Date()}
-                  date={this.state.userData.birthDate}
-                  style={{borderBottomWidth: 1, borderColor: Colors.labelColor}}
-                  customStyles={{dateInput:{border: 0, borderColor: "transparent"}}}
+                  date={this.state.userData.dateOfBirth}
+                  style={{ borderBottomWidth: 1, borderColor: Colors.labelColor }}
+                  customStyles={{ dateInput: { border: 0, borderColor: "transparent" } }}
                   onError={err => {
                     this.setState({
-                      error: { ...this.state.error, birthDate: err },
-                      userData: { ...this.state.userData, birthDate: null }
+                      error: { ...this.state.error, dateOfBirth: err },
+                      userData: { ...this.state.userData, dateOfBirth: null }
                     });
                   }}
                   onDateChange={date => {
                     this.setState({
-                      error: { ...this.state.error, birthDate: null },
-                      userData: { ...this.state.userData, birthDate: date }
+                      error: { ...this.state.error, dateOfBirth: null },
+                      userData: { ...this.state.userData, dateOfBirth: date }
                     });
                   }}
                 />
@@ -221,20 +222,28 @@ export default class SignUpScreen extends React.Component {
       errorObject.password =
         "Please, make sure your password is at least 6 characters long.";
     else errorObject.password = null;
-    if (this.state.userData.birthDate == null)
-      errorObject.birthDate =
+    if (this.state.userData.dateOfBirth == null)
+      errorObject.dateOfBirth =
         "Please, check your birth date.";
-    else errorObject.birthDate = null;
+    else errorObject.dateOfBirth = null;
     if (
       errorObject.username != null ||
       errorObject.email != null ||
       errorObject.password != null ||
-      errorObject.birthDate != null
+      errorObject.dateOfBirth != null
     )
       this.setState({ error: errorObject });
     else {
       console.log(this.state.userData);
-      this.props.navigation.navigate("SignIn");
+      //this.props.navigation.navigate("SignIn");
+      this.props.signUp(this.state.userData);
     }
   };
 }
+
+export default connect(({ tweets }) => ({
+  tweetData: Object.values(tweets.data),
+  loading: tweets.loading
+}), dispatch => ({
+  signUp: (data) => dispatch(signUp(data))
+}))(SignUpScreen);

@@ -8,6 +8,8 @@ export const loginSuccess = ({ token, user }) => ({ type: userConstants.LOGIN_SU
 
 export const loginFail = (error) => ({ type: userConstants.LOGIN_FAIL, error });
 
+export const signUp = (data) => ({ type: userConstants.REGISTER, data });
+
 export const requestSignUp = () => ({ type: userConstants.REGISTER_REQUEST });
 
 export const successSignUp = ({ token, user }) => ({ type: userConstants.REGISTER_SUCCESS, data: { token, ...user } });
