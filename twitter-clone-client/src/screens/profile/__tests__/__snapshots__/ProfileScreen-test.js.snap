@@ -173,7 +173,13 @@ exports[`ProfileScreen renders another user's profile 1`] = `
         routes={
           Array [
             Object {
-              "component": [Function],
+              "component": Object {
+                "$$typeof": Symbol(react.memo),
+                "WrappedComponent": [Function],
+                "compare": null,
+                "displayName": "Connect(TweetList)",
+                "type": [Function],
+              },
               "title": "Tweets",
             },
             Object {
@@ -352,7 +358,13 @@ exports[`ProfileScreen renders current user's profile 1`] = `
         routes={
           Array [
             Object {
-              "component": [Function],
+              "component": Object {
+                "$$typeof": Symbol(react.memo),
+                "WrappedComponent": [Function],
+                "compare": null,
+                "displayName": "Connect(TweetList)",
+                "type": [Function],
+              },
               "title": "Tweets",
             },
             Object {

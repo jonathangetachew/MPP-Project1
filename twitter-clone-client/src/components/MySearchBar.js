@@ -12,6 +12,8 @@ import {
 } from 'react-native-elements';
 import constants from '../redux/actions/tweets';
 import { connect } from 'react-redux';
+import { getTweets, searchTweets } from '../redux/actions/tweets';
+
 class MySearchBar extends Component {
   constructor() {
     super();
@@ -144,9 +146,9 @@ export default connect(({ tweets }) => ({
   loading: tweets.loading
 }), dispatch => ({
   getTweets: () => {
-    dispatch({ type: constants.GET_TWEETS });
+    dispatch(getTweets());
   },
   searchTweet: (criteria) => {
-    dispatch({ type: constants.SEARCH_TWEETS, criteria });
+    dispatch(searchTweets(criteria));
   }
 }))(MySearchBar);

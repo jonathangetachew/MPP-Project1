@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/22</span>
+        <span class='fraction'>0/20</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/20</span>
+        <span class='fraction'>0/18</span>
       </div>
     </div>
     <p class="quiet">
@@ -90,31 +90,29 @@
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -137,33 +135,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { call, put, takeLatest } from 'redux-saga/effects';
-import constants from '../actions/tweets';
+import constants from '../constants/tweets';
 import { store } from '../store';
 import tweetServiceMock from '../services/tweet.service.mock';
+import { getTweetsSuccess, getTweetsFail, searchTweetsRequest, getTweetsRequest, searchTweetsSuccess, searchTweetsFail } from '../actions/tweets';
 &nbsp;
-function* <span class="fstat-no" title="function not covered" >items(</span>action) {
-<span class="cstat-no" title="statement not covered" >    yield put({ type: constants.GET_TWEETS_REQUEST });</span>
+export function* <span class="fstat-no" title="function not covered" >items(</span>action) {
+<span class="cstat-no" title="statement not covered" >    yield put(getTweetsRequest());</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
         const data = <span class="cstat-no" title="statement not covered" >yield call(tweetServiceMock.getTweets);</span>
-       
-<span class="cstat-no" title="statement not covered" >        yield put({ type: constants.GET_TWEETS_SUCCESS, data: data.map(<span class="fstat-no" title="function not covered" >(i</span>tem, key) =&gt; <span class="cstat-no" title="statement not covered" >!item.id ? { ...item, id: key } : item)</span> });</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        yield put(getTweetsSuccess(data.map(<span class="fstat-no" title="function not covered" >(i</span>tem, key) =&gt; <span class="cstat-no" title="statement not covered" >!item.id ? { ...item, id: key } : item)</span>));</span>
     } catch (error) {
         let errorMessage = <span class="cstat-no" title="statement not covered" >'Error when retrieving items';</span>
 <span class="cstat-no" title="statement not covered" >        if (error &amp;&amp; error.message) {</span>
 <span class="cstat-no" title="statement not covered" >            errorMessage = error.message;</span>
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        yield put({ type: constants.GET_TWEETS_FAIL, error: errorMessage });</span>
+<span class="cstat-no" title="statement not covered" >        yield put(getTweetsFail(errorMessage));</span>
     }
 }
 &nbsp;
-function* <span class="fstat-no" title="function not covered" >searchItems(</span>action) {
-<span class="cstat-no" title="statement not covered" >    yield put({ type: constants.SEARCH_TWEETS_REQUEST });</span>
-<span class="cstat-no" title="statement not covered" >    console.log('sage');</span>
+export function* <span class="fstat-no" title="function not covered" >searchItems(</span>action) {
+<span class="cstat-no" title="statement not covered" >    yield put(searchTweetsRequest());</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-        const data = <span class="cstat-no" title="statement not covered" >yield call(tweetServiceMock.search, action.criteria);       </span>
-<span class="cstat-no" title="statement not covered" >        console.log('data',data); </span>
-<span class="cstat-no" title="statement not covered" >        yield put({ type: constants.SEARCH_TWEETS_SUCCESS, data: data.map(<span class="fstat-no" title="function not covered" >(i</span>tem, key) =&gt; <span class="cstat-no" title="statement not covered" >!item.id ? { ...item, id: key } : item)</span> });</span>
+        const data = <span class="cstat-no" title="statement not covered" >yield call(tweetServiceMock.search, action.criteria);</span>
+<span class="cstat-no" title="statement not covered" >        yield put(searchTweetsSuccess(data.map(<span class="fstat-no" title="function not covered" >(i</span>tem, key) =&gt; <span class="cstat-no" title="statement not covered" >!item.id ? { ...item, id: key } : item)</span>));</span>
     } catch (error) {
 &nbsp;
         let errorMessage = <span class="cstat-no" title="statement not covered" >'Error when retrieving items';</span>
@@ -173,7 +170,7 @@ function* <span class="fstat-no" title="function not covered" >searchItems(</spa
 <span class="cstat-no" title="statement not covered" >            errorMessage = error.message;</span>
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        yield put({ type: constants.SEARCH_TWEETS_FAIL, error: errorMessage });</span>
+<span class="cstat-no" title="statement not covered" >        yield put(searchTweetsFail(errorMessage));</span>
     }
 }
 &nbsp;
@@ -187,11 +184,7 @@ export default [
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-<<<<<<< HEAD
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Sep 15 2019 20:45:39 GMT-0500 (Central Daylight Time)
-=======
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Sep 15 2019 21:31:28 GMT-0500 (Central Daylight Time)
->>>>>>> feature/CA-30
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Sep 16 2019 02:41:07 GMT-0500 (Central Daylight Time)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

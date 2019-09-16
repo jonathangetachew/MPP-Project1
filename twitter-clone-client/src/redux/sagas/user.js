@@ -1,28 +1,29 @@
-import {call, put, takeLatest} from 'redux-saga/effects';
-import userActions from '../actions/user';
+import { call, put, takeLatest } from 'redux-saga/effects';
+import userConstants from '../constants/user';
 import UserService from '../services/user.service';
+import * as userActions from '../actions/user';
 
 function* login(action) {
-    yield put({type: userActions.LOGIN_REQUEST});
+    yield put(userActions.loginRequest());
     try {
         const data = yield call(UserService.signin, {
             identifier: action.identifier,
             password: action.password
         });
 
-        yield put({type: userActions.LOGIN_SUCCESS, data: {token: data.jwt, ...data.user}});
+        yield put(userActions.loginSuccess({ token: data.jwt, user: data.user }));
     } catch (error) {
         let errorMessage = 'Error when logging in, please try again later';
         if (error && error.message) {
             errorMessage = error.message
         }
 
-        yield put({type: userActions.LOGIN_FAIL, error: errorMessage});
+        yield put(loginFail(errorMessage));
     }
 }
 
 function* register(action) {
-    yield put({type: userActions.REGISTER_REQUEST});
+    yield put(userActions.requestSignUp());
     try {
         const data = yield call(UserService.signup, {
             username: action.username,
@@ -30,78 +31,40 @@ function* register(action) {
             password: action.password
         });
 
-        yield put({type: userActions.REGISTER_SUCCESS, token: data.jwt, ...data.user});
+        yield put(userActions.successSignUp({ token: data.jwt, user: data.user }));
     } catch (error) {
         let errorMessage = 'Error when registering an profile, please try again later';
         if (error && error.message) {
             errorMessage = error.message
         }
 
-        yield put({type: userActions.REGISTER_FAIL, error: errorMessage});
+        yield put(userActions.failedSignUp(errorMessage));
     }
 }
 
 function* logout() {
-    yield put({type: userActions.LOGOUT_REQUEST});
-}
-
-function* forgotPassword(action) {
-    try {
-        const data = yield call(UserService.forgotPassword, {
-            email: action.email
-        });
-
-        const ok = data.ok;
-
-        if (ok) {
-            yield put({type: userActions.FORGOT_PASSWORD_SUCCESS});
-        }
-    } catch (error) {
-        let errorMessage = 'requesting-recover-error';
-        if (error && error.message) {
-            errorMessage = error.message
-        }
-
-        yield put({type: userActions.FORGOT_PASSWORD_FAIL, error: errorMessage});
-    }
-}
-
-function* resetPassword(action) {
-    try {
-        const data = yield call(UserService.resetPassword, {
-            code: action.code,
-            password: action.password,
-            passwordConfirmation: action.passwordConfirmation
-        });
-
-        yield put({type: userActions.LOGIN_SUCCESS, token: data.jwt, ...data.user});
-    } catch (error) {
-        let errorMessage = 'reset-password-error';
-        if (error && error.message) {
-            errorMessage = error.message
-        }
-    }
+    yield put(userActions.logout());
 }
 
 function* updateSelf(action) {
+    yield put(userActions.updateRequest())
     try {
         const data = yield call(UserService.update, {
             ...action.user
         })
-        yield put({ type: userActions.UPDATE_SUCCESS, data })
-    } catch(error) {
+        yield put(userActions.updateSuccess(data))
+    } catch (error) {
         let errorMessage = 'reset-password-error';
         if (error && error.message) {
             errorMessage = error.message
         }
+        yield put(userActions.updateFail(errorMessage))
     }
 }
 
 export default [
-    takeLatest(userActions.LOGIN, login),
-    takeLatest(userActions.REGISTER, register),
-    takeLatest(userActions.LOGOUT, logout),
-    takeLatest(userActions.FORGOT_PASSWORD, forgotPassword),
-    takeLatest(userActions.RESET_PASSWORD, resetPassword),
-    takeLatest(userActions.UPDATE, updateSelf)
+    takeLatest(userConstants.LOGIN, login),
+    takeLatest(userConstants.REGISTER, register),
+    takeLatest(userConstants.LOGOUT, logout),
+    takeLatest(userConstants.UPDATE, updateSelf)
 ];

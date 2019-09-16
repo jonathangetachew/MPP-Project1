@@ -6,9 +6,10 @@ import Colors from '../../constants/Colors';
 import RoundButton from '../../components/RoundButton';
 import TabBarIcon from '../../components/TabBarIcon';
 import TabViewComponent from '../../components/TabViewComponent';
+import TweetList from '../../components/TweetList';
 
 const FirstRoute = () => (
-    <View style={[styles.scene, { backgroundColor: 'purple', height: 300 }]}>
+    <View style={[styles.scene, { height: 300 }]}>
         <Text>a</Text>
     </View>
 );
@@ -83,7 +84,7 @@ export class ProfileScreen extends React.Component {
                         </View>
                     </View>
                     <TabViewComponent routes={[
-                        { title: 'Tweets', component: FirstRoute },
+                        { title: 'Tweets', component: TweetList },
                         { title: 'Tweets & replies', component: SecondRoute },
                         { title: 'Media', component: FirstRoute },
                         { title: 'Likes', component: SecondRoute },
@@ -132,4 +133,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(({ user }) => ({ user }))(ProfileScreen);
+export default connect(({ user }) => ({ user: {...user, email:'current@mail.com'} }))(ProfileScreen);

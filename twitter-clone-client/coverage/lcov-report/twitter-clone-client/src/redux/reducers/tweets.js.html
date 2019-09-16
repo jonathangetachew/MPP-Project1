@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">33.33% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/9</span>
+        <span class='fraction'>9/9</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">25% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>2/8</span>
+        <span class='fraction'>8/8</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -35,16 +35,16 @@
         <span class='fraction'>1/1</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">33.33% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/9</span>
+        <span class='fraction'>9/9</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -73,30 +73,30 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import constants from '../actions/tweets';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import constants from '../constants/tweets';
 &nbsp;
 const initialState = {
     loading: false,
@@ -106,18 +106,18 @@ const initialState = {
 &nbsp;
 export default (state = initialState, action) =&gt; {
     switch (action.type) {
-<span class="branch-0 cbranch-no" title="branch not covered" >        case constants.GET_TWEETS_REQUEST:</span>
-<span class="cstat-no" title="statement not covered" >            return { ...state, loading: true, error: undefined };</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >        case constants.GET_TWEETS_SUCCESS:</span>
-<span class="cstat-no" title="statement not covered" >            return { ...state, loading: false, data: { ...state.data, ...action.data } };</span>
-<span class="branch-2 cbranch-no" title="branch not covered" >        case constants.GET_TWEETS_FAIL:</span>
-<span class="cstat-no" title="statement not covered" >            return { ...state, loading: false, error: action.error };</span>
-<span class="branch-3 cbranch-no" title="branch not covered" >        case constants.SEARCH_TWEETS_REQUEST:</span>
-<span class="cstat-no" title="statement not covered" >            return { ...state, loading: true, error: undefined, data: {}};</span>
-<span class="branch-4 cbranch-no" title="branch not covered" >        case constants.SEARCH_TWEETS_SUCCESS:</span>
-<span class="cstat-no" title="statement not covered" >            return { ...state, loading: false, data: { ...action.data } };</span>
-<span class="branch-5 cbranch-no" title="branch not covered" >        case constants.SEARCH_TWEETS_FAIL:</span>
-<span class="cstat-no" title="statement not covered" >                return { ...state, loading: false, error: action.error };</span>
+        case constants.GET_TWEETS_REQUEST:
+            return { ...state, loading: true, error: undefined };
+        case constants.GET_TWEETS_SUCCESS:
+            return { ...state, loading: false, data: { ...state.data, ...action.data } };
+        case constants.GET_TWEETS_FAIL:
+            return { ...state, loading: false, error: action.error };
+        case constants.SEARCH_TWEETS_REQUEST:
+            return { ...state, loading: true, error: undefined, data: {}};
+        case constants.SEARCH_TWEETS_SUCCESS:
+            return { ...state, loading: false, data: { ...action.data } };
+        case constants.SEARCH_TWEETS_FAIL:
+                return { ...state, loading: false, error: action.error };
         default:
             return state;
     }
@@ -127,11 +127,7 @@ export default (state = initialState, action) =&gt; {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-<<<<<<< HEAD
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Sep 15 2019 20:45:39 GMT-0500 (Central Daylight Time)
-=======
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Sep 15 2019 21:31:28 GMT-0500 (Central Daylight Time)
->>>>>>> feature/CA-30
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Sep 16 2019 02:41:07 GMT-0500 (Central Daylight Time)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>
