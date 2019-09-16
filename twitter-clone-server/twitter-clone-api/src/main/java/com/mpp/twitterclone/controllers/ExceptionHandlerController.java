@@ -36,7 +36,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	public ResponseEntity<?> resourceExistsHandler(ResourceExistsException ex) {
 		Map<Object, Object> response = new HashMap<>();
 		response.put("status", HttpStatus.CONFLICT.value());
-		response.put("error", HttpStatus.NOT_FOUND.getReasonPhrase());
+		response.put("error", HttpStatus.CONFLICT.getReasonPhrase());
 		response.put("message", ex.getMessage());
 
 		return ResponseEntity

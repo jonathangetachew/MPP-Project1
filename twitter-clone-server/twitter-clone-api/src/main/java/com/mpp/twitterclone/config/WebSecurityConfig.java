@@ -59,9 +59,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers(
 						"/api/v1/users/{username}",
+						"/api/v1/tweets/user/{username}",
 						"/api/v1/login",
-						"/api/v1/signup",
-						"/api/v1/users/{username}").permitAll()
+						"/api/v1/signup").permitAll()
 				.antMatchers(
 						"/api/v1/tweets",
 						"api/v1/users").hasAuthority(RoleName.ADMIN.toString())

@@ -50,6 +50,7 @@ public class User implements UserDetails {
 	private String name;
 
 	@Indexed(unique = true)
+	@NotEmpty(message = "Email is Required")
 	private String email;
 
 	private Gender gender;
