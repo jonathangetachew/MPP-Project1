@@ -121,18 +121,18 @@ public class AuthController {
 
 		// After creating user, authenticate then generate token to make the signup process similar to login
 		// Authenticate User
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(newUser.getUsername(), newUser.getPassword()));
+//		Authentication authentication = authenticationManager.authenticate(
+//				new UsernamePasswordAuthenticationToken(newUser.getUsername(), newUser.getPassword()));
 
 		// Set the Context Holder content to the newly authenticated user for other actions to use
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+//		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		// Generate token
-		String token = tokenProvider.generateToken(authentication);
+//		String token = tokenProvider.generateToken(authentication);
 
 		Map<Object, Object> responseMessage = new HashMap<>();
 		responseMessage.put("message", "Successfully Signed Up as " + newUser.getUsername());
-		responseMessage.put("token", token);
+//		responseMessage.put("token", token);
 		responseMessage.put("user", newUser);
 
 		return ResponseEntity
