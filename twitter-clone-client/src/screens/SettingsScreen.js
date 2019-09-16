@@ -11,5 +11,5 @@ export default function SettingsScreen() {
 }
 
 SettingsScreen.navigationOptions = {
-  headerTitle: <LogoTitle title="Links"/>
+  headerTitle: <LogoTitle title="Settings"/>
 };
