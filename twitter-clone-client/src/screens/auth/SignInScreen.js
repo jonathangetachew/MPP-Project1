@@ -8,6 +8,7 @@ import {
   Image,
   Platform
 } from "react-native";
+import {connect} from 'react-redux';
 import { Header } from "react-navigation";
 import { CheckBox } from "react-native-elements";
 import RoundButton from "../../components/RoundButton";
@@ -15,6 +16,7 @@ import Colors from "../../constants/Colors";
 import Icon from "react-native-vector-icons/FontAwesome";
 import imageLogo from "../../../assets/images/logo.png";
 import { default as Input } from "../../components/RespectFlexInput";
+import { login } from "../../redux/actions/user";
 
 const LoginHeader = props => (
   <View
@@ -45,7 +47,7 @@ const LoginHeader = props => (
   </View>
 );
 
-export default class SignInScreen extends React.Component {
+class SignInScreen extends React.Component {
   state = {
     username: "",
     usernameError: null,
@@ -196,8 +198,9 @@ export default class SignInScreen extends React.Component {
         usernameError: null,
         passwordError: null
       });
-      await AsyncStorage.setItem("userToken", "abc");
-      this.props.navigation.navigate("App");
+      //await AsyncStorage.setItem("userToken", "abc");
+      //this.props.navigation.navigate("App");
+      this.props.signIn({identifier: this.state.username, password: this.state.password});
     }
   };
 
@@ -210,3 +213,9 @@ export default class SignInScreen extends React.Component {
     }
   };
 }
+export default connect(({ tweets }) => ({
+  tweetData: Object.values(tweets.data),
+  loading: tweets.loading
+}), dispatch => ({
+  signIn: (data) => dispatch(login(data))
+}))(SignInScreen);

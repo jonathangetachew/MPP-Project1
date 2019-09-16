@@ -1,11 +1,10 @@
-import axios from 'axios';
+import axios from './axios-instance';
 
 export class TweetService {
   constructor(){
     this.axios = axios;
   }
   async getItems() {
-   
     return await axios.get('/tweets');
   }
 

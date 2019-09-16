@@ -1,5 +1,7 @@
 import userConstants from '../constants/user';
 
+export const login = ({ identifier, password }) => ({ type: userConstants.LOGIN, identifier, password });
+
 export const loginRequest = () => ({ type: userConstants.LOGIN_REQUEST });
 
 export const loginSuccess = ({ token, user }) => ({ type: userConstants.LOGIN_SUCCESS, data: { token, ...user } });
