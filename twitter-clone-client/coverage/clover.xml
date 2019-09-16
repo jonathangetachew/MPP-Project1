@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <coverage generated="1568598339550" clover="3.2.0">
   <project timestamp="1568598339550" name="All files">
+=======
+<coverage generated="1568601088979" clover="3.2.0">
+  <project timestamp="1568601088979" name="All files">
+>>>>>>> feature/CA-30
     <metrics statements="137" coveredstatements="40" conditionals="90" coveredconditionals="28" methods="43" coveredmethods="12" elements="270" coveredelements="80" complexity="0" loc="137" ncloc="137" packages="9" files="19" classes="19"/>
     <package name="twitter-clone-client">
       <metrics statements="12" coveredstatements="8" conditionals="6" coveredconditionals="6" methods="5" coveredmethods="1"/>
