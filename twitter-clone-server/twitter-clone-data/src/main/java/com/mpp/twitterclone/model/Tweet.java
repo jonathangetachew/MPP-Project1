@@ -1,6 +1,7 @@
 package com.mpp.twitterclone.model;
 
 import com.mpp.twitterclone.enums.TweetSource;
+import com.mpp.twitterclone.model.tweetcontents.TextContent;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.hateoas.core.Relation;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,6 +26,10 @@ import java.util.List;
 public class Tweet {
 	@Id
 	private String id;
+
+	@NotEmpty(message = "Tweet Message is Required")
+	@Size(min = 1, max = 140, message = "Tweet Message Cannot be More Than 140 Characters")
+	private String text;
 
 	private List<TweetableContent> content;
 
