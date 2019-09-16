@@ -99,9 +99,9 @@ public class UserController {
 	@ApiOperation(value = "Follow a User",
 					notes = "This operation can only be done by an authenticated user.")
 	@PostMapping("/{id}/follow")
-	public ResponseEntity<Resource<User>> followUser(@PathVariable String id) throws URISyntaxException {
-		// Todo: change user id to id from principal object
-		Resource<User> userResource = userResourceAssembler.toResource(userService.followUser(id, "test"));
+	public ResponseEntity<Resource<User>> followUser(@PathVariable String id, Principal principal) throws URISyntaxException {
+		Resource<User> userResource = userResourceAssembler.toResource(userService.followUser(id,
+																							principal.getName()));
 
 		return ResponseEntity
 				.created(new URI(userResource.getId().expand().getHref()))

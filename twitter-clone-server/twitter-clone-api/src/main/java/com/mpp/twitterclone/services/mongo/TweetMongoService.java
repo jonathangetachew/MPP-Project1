@@ -109,6 +109,7 @@ public class TweetMongoService implements TweetService {
 					// Check if user performing the update is the owner
 					userActionValidator.validateUserAction(currentUsername, t.getOwner());
 
+					t.setText(newTweet.getText());
 					t.setContent(newTweet.getContent());
 					t.setRetweetCount(newTweet.getRetweetCount());
 					t.setFavoriteCount(newTweet.getFavoriteCount());
