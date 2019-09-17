@@ -4,6 +4,7 @@ export default {
         return axios.post('login', { username: identifier, password });
     },
     signup: async (user) => {
+        console.log("ASdsa", user);
         return axios.post('signup', user);
     },
     forgotPassword: async ({ identifier }) => {

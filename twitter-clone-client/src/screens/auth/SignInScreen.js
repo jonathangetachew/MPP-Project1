@@ -198,9 +198,9 @@ class SignInScreen extends React.Component {
         usernameError: null,
         passwordError: null
       });
-      //await AsyncStorage.setItem("userToken", "abc");
-      //this.props.navigation.navigate("App");
-      this.props.signIn({identifier: this.state.username, password: this.state.password});
+      await AsyncStorage.setItem("userToken", "abc");
+      this.props.navigation.navigate("App");
+      //this.props.signIn({identifier: this.state.username, password: this.state.password});
     }
   };
 

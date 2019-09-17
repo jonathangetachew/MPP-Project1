@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import constants from '../constants/tweets';
 import { store } from '../store';
-import tweetService from '../services/tweet.service';
+import tweetService from '../services/tweet.service.mock';
 import { getTweetsSuccess, getTweetsFail, searchTweetsRequest, getTweetsRequest, searchTweetsSuccess, searchTweetsFail } from '../actions/tweets';
 
 export function* items(action) {
