@@ -18,25 +18,22 @@ function* login(action) {
             errorMessage = error.message
         }
 
-        yield put(loginFail(errorMessage));
+        yield put(userActions.loginFail(errorMessage));
     }
 }
 
 function* register(action) {
     yield put(userActions.requestSignUp());
     try {
-        const data = yield call(UserService.signup, {
-            username: action.username,
-            email: action.email,
-            password: action.password
-        });
-
+        const data = yield call(UserService.signup, action.data);
+        
         yield put(userActions.successSignUp({ token: data.jwt, user: data.user }));
     } catch (error) {
         let errorMessage = 'Error when registering an profile, please try again later';
         if (error && error.message) {
             errorMessage = error.message
         }
+        console.log(error)
 
         yield put(userActions.failedSignUp(errorMessage));
     }

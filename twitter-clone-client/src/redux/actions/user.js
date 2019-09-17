@@ -1,10 +1,14 @@
 import userConstants from '../constants/user';
 
+export const login = ({ identifier, password }) => ({ type: userConstants.LOGIN, identifier, password });
+
 export const loginRequest = () => ({ type: userConstants.LOGIN_REQUEST });
 
 export const loginSuccess = ({ token, user }) => ({ type: userConstants.LOGIN_SUCCESS, data: { token, ...user } });
 
 export const loginFail = (error) => ({ type: userConstants.LOGIN_FAIL, error });
+
+export const signUp = (data) => ({ type: userConstants.REGISTER, data });
 
 export const requestSignUp = () => ({ type: userConstants.REGISTER_REQUEST });
 
